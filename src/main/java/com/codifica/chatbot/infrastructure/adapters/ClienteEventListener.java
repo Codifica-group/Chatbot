@@ -1,8 +1,8 @@
 package com.codifica.chatbot.infrastructure.adapters;
 
 import com.codifica.chatbot.core.application.ports.in.ProcessarCadastroClienteSucessoUseCasePort;
-import com.codifica.chatbot.core.domain.model.events.response.ClienteCadastradoEvent;
-import com.codifica.chatbot.core.domain.model.events.response.FalhaCadastroClienteEvent;
+import com.codifica.chatbot.core.domain.model.events.cliente.CadastroClienteResponseEvent;
+import com.codifica.chatbot.core.domain.shared.StatusEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,17 +18,15 @@ public class ClienteEventListener {
         this.processarCadastroUseCase = processarCadastroUseCase;
     }
 
-    @RabbitListener(queues = "cliente.cadastrado.queue")
-    public void onClienteCadastrado(ClienteCadastradoEvent event) {
-        processarCadastroUseCase.processar(event.getChatId(), event.getClienteId());
-    }
-
-    @RabbitListener(queues = "cliente.falha-cadastro.queue")
-    public void onFalhaCadastro(FalhaCadastroClienteEvent event) {
-        logger.error("FALHA: Ocorreu um erro ao cadastrar o cliente para o chatId {}. Motivo: {}",
-                event.getChatId(), event.getErro());
-
-        // Próximo passo: Atualizar o estado do chat para um estado de erro
-        // e talvez enviar uma mensagem ao usuário pedindo para tentar novamente.
+    @RabbitListener(queues = "cliente.cadastro.response.queue")
+    public void onCadastroClienteResponse(CadastroClienteResponseEvent event) {
+        if (event.getStatus() == StatusEvent.SUCESSO) {
+            logger.info("SUCESSO: Cliente para o chatId {} cadastrado com clienteId {}.", event.getChatId(), event.getClienteId());
+            processarCadastroUseCase.processar(event.getChatId(), event.getClienteId());
+        } else {
+            logger.error("FALHA: Ocorreu um erro ao cadastrar o cliente para o chatId {}: {}",
+                    event.getChatId(), event.getErro());
+            // TODO: Lógica para tratativa de erro.
+        }
     }
 }

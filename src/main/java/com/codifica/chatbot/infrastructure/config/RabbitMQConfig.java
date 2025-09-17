@@ -13,12 +13,10 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String EXCHANGE_NAME = "cliente_exchange";
-    public static final String QUEUE_NAME = "cliente.para-cadastrar.queue";
-    public static final String ROUTING_KEY = "cliente.para-cadastrar";
-    public static final String QUEUE_CLIENTE_CADASTRADO = "cliente.cadastrado.queue";
-    public static final String QUEUE_FALHA_CADASTRO = "cliente.falha-cadastro.queue";
-    public static final String ROUTING_KEY_CLIENTE_CADASTRADO = "cliente.cadastrado";
-    public static final String ROUTING_KEY_FALHA_CADASTRO = "cliente.falha-cadastro";
+    public static final String QUEUE_PARA_CADASTRAR = "cliente.para-cadastrar.queue";
+    public static final String ROUTING_KEY_PARA_CADASTRAR = "cliente.para-cadastrar";
+    public static final String QUEUE_CLIENTE_RESPONSE = "cliente.cadastro.response.queue";
+    public static final String ROUTING_KEY_CLIENTE_RESPONSE = "cliente.cadastro.response";
 
     @Bean
     TopicExchange exchange() {
@@ -26,33 +24,23 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    Queue queue() {
-        return new Queue(QUEUE_NAME, true);
+    Queue paraCadastrarQueue() {
+        return new Queue(QUEUE_PARA_CADASTRAR, true);
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    Queue clienteResponseQueue() {
+        return new Queue(QUEUE_CLIENTE_RESPONSE, true);
     }
 
     @Bean
-    Queue clienteCadastradoQueue() {
-        return new Queue(QUEUE_CLIENTE_CADASTRADO, true);
+    Binding paraCadastrarBinding(Queue paraCadastrarQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(paraCadastrarQueue).to(exchange).with(ROUTING_KEY_PARA_CADASTRAR);
     }
 
     @Bean
-    Queue falhaCadastroQueue() {
-        return new Queue(QUEUE_FALHA_CADASTRO, true);
-    }
-
-    @Bean
-    Binding clienteCadastradoBinding(Queue clienteCadastradoQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(clienteCadastradoQueue).to(exchange).with(ROUTING_KEY_CLIENTE_CADASTRADO);
-    }
-
-    @Bean
-    Binding falhaCadastroBinding(Queue falhaCadastroQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(falhaCadastroQueue).to(exchange).with(ROUTING_KEY_FALHA_CADASTRO);
+    Binding clienteResponseBinding(Queue clienteResponseQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(clienteResponseQueue).to(exchange).with(ROUTING_KEY_CLIENTE_RESPONSE);
     }
 
     @Bean

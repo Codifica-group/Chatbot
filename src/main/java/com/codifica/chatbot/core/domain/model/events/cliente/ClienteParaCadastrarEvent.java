@@ -1,4 +1,4 @@
-package com.codifica.chatbot.core.domain.model.events;
+package com.codifica.chatbot.core.domain.model.events.cliente;
 
 import com.codifica.chatbot.core.domain.shared.Endereco;
 import com.fasterxml.jackson.annotation.JsonCreator;

@@ -4,7 +4,7 @@ import com.codifica.chatbot.core.application.ports.in.ChatEventPort;
 import com.codifica.chatbot.core.application.ports.out.ClienteEventPort;
 import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
-import com.codifica.chatbot.core.domain.model.events.ClienteParaCadastrarEvent;
+import com.codifica.chatbot.core.domain.model.events.cliente.ClienteParaCadastrarEvent;
 import com.codifica.chatbot.interfaces.dto.ChatDTO;
 import com.codifica.chatbot.interfaces.mappers.ChatDtoMapper;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.codifica.chatbot.infrastructure.adapters;
 
 import com.codifica.chatbot.core.application.ports.out.ClienteEventPort;
-import com.codifica.chatbot.core.domain.model.events.ClienteParaCadastrarEvent;
+import com.codifica.chatbot.core.domain.model.events.cliente.ClienteParaCadastrarEvent;
 import com.codifica.chatbot.infrastructure.config.RabbitMQConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class ClienteEventPublisher implements ClienteEventPort {
         logger.info("Publicando evento para cadastro de cliente com chatId: {}", event.getChatId());
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE_NAME,
-                RabbitMQConfig.ROUTING_KEY,
+                RabbitMQConfig.ROUTING_KEY_PARA_CADASTRAR,
                 event
         );
     }
