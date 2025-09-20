@@ -2,6 +2,7 @@ package com.codifica.chatbot.infrastructure.config;
 
 import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
 import com.codifica.chatbot.core.application.usecase.ClienteParaCadastrarResponseUseCase;
+import com.codifica.chatbot.core.application.usecase.PetParaCadastrarResponseUseCase;
 import com.codifica.chatbot.core.application.usecase.SalvarChatUseCase;
 import com.codifica.chatbot.core.domain.chat.ChatRepository;
 import com.codifica.chatbot.infrastructure.persistence.chat_cliente.ChatClienteJpaRepository;
@@ -26,5 +27,11 @@ public class UseCaseConfig {
             ChatRepository chatRepository,
             ChatClienteJpaRepository chatClienteJpaRepository) {
         return new ClienteParaCadastrarResponseUseCase(chatRepository, chatClienteJpaRepository);
+    }
+
+    @Bean
+    public PetParaCadastrarResponseUseCase processPetParaCadastrarResponseUseCase(
+            ChatRepository chatRepository) {
+        return new PetParaCadastrarResponseUseCase(chatRepository);
     }
 }

@@ -17,6 +17,10 @@ public class RabbitMQConfig {
     public static final String ROUTING_KEY_PARA_CADASTRAR = "cliente.para-cadastrar";
     public static final String QUEUE_CLIENTE_RESPONSE = "cliente.cadastro.response.queue";
     public static final String ROUTING_KEY_CLIENTE_RESPONSE = "cliente.cadastro.response";
+    public static final String QUEUE_PET_PARA_CADASTRAR = "pet.para-cadastrar.queue";
+    public static final String ROUTING_KEY_PET_PARA_CADASTRAR = "pet.para-cadastrar";
+    public static final String QUEUE_PET_RESPONSE = "pet.cadastro.response.queue";
+    public static final String ROUTING_KEY_PET_RESPONSE = "pet.cadastro.response";
 
     @Bean
     TopicExchange exchange() {
@@ -41,6 +45,26 @@ public class RabbitMQConfig {
     @Bean
     Binding clienteResponseBinding(Queue clienteResponseQueue, TopicExchange exchange) {
         return BindingBuilder.bind(clienteResponseQueue).to(exchange).with(ROUTING_KEY_CLIENTE_RESPONSE);
+    }
+
+    @Bean
+    Queue petParaCadastrarQueue() {
+        return new Queue(QUEUE_PET_PARA_CADASTRAR, true);
+    }
+
+    @Bean
+    Queue petResponseQueue() {
+        return new Queue(QUEUE_PET_RESPONSE, true);
+    }
+
+    @Bean
+    Binding petParaCadastrarBinding(Queue petParaCadastrarQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(petParaCadastrarQueue).to(exchange).with(ROUTING_KEY_PET_PARA_CADASTRAR);
+    }
+
+    @Bean
+    Binding petResponseBinding(Queue petResponseQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(petResponseQueue).to(exchange).with(ROUTING_KEY_PET_RESPONSE);
     }
 
     @Bean

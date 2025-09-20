@@ -2,9 +2,11 @@ package com.codifica.chatbot.interfaces.controller;
 
 import com.codifica.chatbot.core.application.ports.in.ChatEventPort;
 import com.codifica.chatbot.core.application.ports.out.ClienteEventPublisherPort;
+import com.codifica.chatbot.core.application.ports.out.PetEventPublisherPort;
 import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.cliente.ClienteParaCadastrarEvent;
+import com.codifica.chatbot.core.domain.events.pet.PetParaCadastrarEvent;
 import com.codifica.chatbot.interfaces.dto.ChatDTO;
 import com.codifica.chatbot.interfaces.mappers.ChatDtoMapper;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +24,11 @@ public class TestEventController {
     private final ChatEventPort chatEventPort;
     private final ListChatUseCase listChatUseCase;
     private final ChatDtoMapper chatDtoMapper;
+    private final PetEventPublisherPort petEventPublisherPort;
 
-    public TestEventController(ClienteEventPublisherPort clienteEventPublisherPort, ChatEventPort chatEventPort, ListChatUseCase listChatUseCase, ChatDtoMapper chatDtoMapper) {
+    public TestEventController(ClienteEventPublisherPort clienteEventPublisherPort, PetEventPublisherPort petEventPublisherPort, ChatEventPort chatEventPort, ListChatUseCase listChatUseCase, ChatDtoMapper chatDtoMapper) {
         this.clienteEventPublisherPort = clienteEventPublisherPort;
+        this.petEventPublisherPort = petEventPublisherPort;
         this.chatEventPort = chatEventPort;
         this.listChatUseCase = listChatUseCase;
         this.chatDtoMapper = chatDtoMapper;
@@ -49,5 +53,18 @@ public class TestEventController {
                 .map(chatDtoMapper::toDto)
                 .collect(Collectors.toList());
         return chats.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(chats);
+    }
+
+    @PostMapping("/pet-para-cadastrar")
+    public ResponseEntity<String> dispararEventoPet(@RequestBody PetParaCadastrarEvent event) {
+        Chat chat = new Chat();
+        chat.setId(event.getChatId());
+        chat.setPassoAtual("AGUARDANDO_CADASTRO_DE_PET");
+        chat.setDataAtualizacao(LocalDateTime.now());
+        chat.setDadosContexto("{\"evento\": \"PetParaCadastrarEvent\"}");
+
+        chatEventPort.save(chat);
+        petEventPublisherPort.publishPetParaCadastrar(event);
+        return ResponseEntity.ok("Chat atualizado e evento de cadastro de pet publicado com sucesso.");
     }
 }
