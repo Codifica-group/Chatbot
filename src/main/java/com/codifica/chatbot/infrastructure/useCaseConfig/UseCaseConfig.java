@@ -1,4 +1,4 @@
-package com.codifica.chatbot.infrastructure.config;
+package com.codifica.chatbot.infrastructure.useCaseConfig;
 
 import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
 import com.codifica.chatbot.core.application.usecase.ClienteParaCadastrarResponseUseCase;

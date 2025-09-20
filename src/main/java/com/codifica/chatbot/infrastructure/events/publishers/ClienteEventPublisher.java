@@ -2,7 +2,8 @@ package com.codifica.chatbot.infrastructure.events.publishers;
 
 import com.codifica.chatbot.core.application.ports.out.ClienteEventPublisherPort;
 import com.codifica.chatbot.core.domain.events.cliente.ClienteParaCadastrarEvent;
-import com.codifica.chatbot.infrastructure.config.RabbitMQConfig;
+import com.codifica.chatbot.infrastructure.rabbitMQ.ClienteRabbitMQConfig;
+import com.codifica.chatbot.infrastructure.rabbitMQ.RabbitMQConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -23,7 +24,7 @@ public class ClienteEventPublisher implements ClienteEventPublisherPort {
         logger.info("EVENTO PUBLICADO: Cliente Para Cadastrar com chatId: {}", event.getChatId());
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE_NAME,
-                RabbitMQConfig.ROUTING_KEY_PARA_CADASTRAR,
+                ClienteRabbitMQConfig.ROUTING_KEY_PARA_CADASTRAR,
                 event
         );
     }
