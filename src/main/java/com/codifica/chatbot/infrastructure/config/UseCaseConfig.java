@@ -1,7 +1,7 @@
 package com.codifica.chatbot.infrastructure.config;
 
 import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
-import com.codifica.chatbot.core.application.usecase.ProcessarCadastroClienteSucessoUseCase;
+import com.codifica.chatbot.core.application.usecase.ClienteParaCadastrarResponseUseCase;
 import com.codifica.chatbot.core.application.usecase.SalvarChatUseCase;
 import com.codifica.chatbot.core.domain.chat.ChatRepository;
 import com.codifica.chatbot.infrastructure.persistence.chat_cliente.ChatClienteJpaRepository;
@@ -22,9 +22,9 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public ProcessarCadastroClienteSucessoUseCase processarCadastroClienteSucessoUseCase(
+    public ClienteParaCadastrarResponseUseCase processClienteParaCadastrarResponseUseCase(
             ChatRepository chatRepository,
             ChatClienteJpaRepository chatClienteJpaRepository) {
-        return new ProcessarCadastroClienteSucessoUseCase(chatRepository, chatClienteJpaRepository);
+        return new ClienteParaCadastrarResponseUseCase(chatRepository, chatClienteJpaRepository);
     }
 }

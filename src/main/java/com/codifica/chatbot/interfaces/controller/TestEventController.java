@@ -1,10 +1,10 @@
 package com.codifica.chatbot.interfaces.controller;
 
 import com.codifica.chatbot.core.application.ports.in.ChatEventPort;
-import com.codifica.chatbot.core.application.ports.out.ClienteEventPort;
+import com.codifica.chatbot.core.application.ports.out.ClienteEventPublisherPort;
 import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
-import com.codifica.chatbot.core.domain.model.events.cliente.ClienteParaCadastrarEvent;
+import com.codifica.chatbot.core.domain.events.cliente.ClienteParaCadastrarEvent;
 import com.codifica.chatbot.interfaces.dto.ChatDTO;
 import com.codifica.chatbot.interfaces.mappers.ChatDtoMapper;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/test/events")
 public class TestEventController {
 
-    private final ClienteEventPort clienteEventPort;
+    private final ClienteEventPublisherPort clienteEventPublisherPort;
     private final ChatEventPort chatEventPort;
     private final ListChatUseCase listChatUseCase;
     private final ChatDtoMapper chatDtoMapper;
 
-    public TestEventController(ClienteEventPort clienteEventPort, ChatEventPort chatEventPort, ListChatUseCase listChatUseCase, ChatDtoMapper chatDtoMapper) {
-        this.clienteEventPort = clienteEventPort;
+    public TestEventController(ClienteEventPublisherPort clienteEventPublisherPort, ChatEventPort chatEventPort, ListChatUseCase listChatUseCase, ChatDtoMapper chatDtoMapper) {
+        this.clienteEventPublisherPort = clienteEventPublisherPort;
         this.chatEventPort = chatEventPort;
         this.listChatUseCase = listChatUseCase;
         this.chatDtoMapper = chatDtoMapper;
@@ -39,7 +39,7 @@ public class TestEventController {
         chat.setDadosContexto("{\"evento\": \"ClienteParaCadastrarEvent\"}");
 
         chatEventPort.save(chat);
-        clienteEventPort.publishClientToRegister(event);
+        clienteEventPublisherPort.publishClienteParaCadastrar(event);
         return ResponseEntity.ok("Chat salvo e evento de cadastro de cliente publicado com sucesso.");
     }
 
