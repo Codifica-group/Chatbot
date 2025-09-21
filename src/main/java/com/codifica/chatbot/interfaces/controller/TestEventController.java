@@ -1,12 +1,13 @@
 package com.codifica.chatbot.interfaces.controller;
 
-import com.codifica.chatbot.core.application.ports.in.ChatEventPort;
 import com.codifica.chatbot.core.application.ports.out.ClienteEventPublisherPort;
 import com.codifica.chatbot.core.application.ports.out.PetEventPublisherPort;
-import com.codifica.chatbot.core.application.usecase.ListChatUseCase;
+import com.codifica.chatbot.core.application.ports.out.SolicitacaoEventPublisherPort;
+import com.codifica.chatbot.core.application.usecase.chat.*;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.cliente.ClienteParaCadastrarEvent;
 import com.codifica.chatbot.core.domain.events.pet.PetParaCadastrarEvent;
+import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaCadastrarEvent;
 import com.codifica.chatbot.interfaces.dto.ChatDTO;
 import com.codifica.chatbot.interfaces.mappers.ChatDtoMapper;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +22,24 @@ import java.util.stream.Collectors;
 public class TestEventController {
 
     private final ClienteEventPublisherPort clienteEventPublisherPort;
-    private final ChatEventPort chatEventPort;
+    private final CreateChatUseCase createChatUseCase;
     private final ListChatUseCase listChatUseCase;
     private final ChatDtoMapper chatDtoMapper;
     private final PetEventPublisherPort petEventPublisherPort;
+    private final SolicitacaoEventPublisherPort solicitacaoEventPublisherPort;
 
-    public TestEventController(ClienteEventPublisherPort clienteEventPublisherPort, PetEventPublisherPort petEventPublisherPort, ChatEventPort chatEventPort, ListChatUseCase listChatUseCase, ChatDtoMapper chatDtoMapper) {
+    public TestEventController(ClienteEventPublisherPort clienteEventPublisherPort,
+                               PetEventPublisherPort petEventPublisherPort,
+                               CreateChatUseCase createChatUseCase,
+                               ListChatUseCase listChatUseCase,
+                               ChatDtoMapper chatDtoMapper,
+                               SolicitacaoEventPublisherPort solicitacaoEventPublisherPort) {
         this.clienteEventPublisherPort = clienteEventPublisherPort;
         this.petEventPublisherPort = petEventPublisherPort;
-        this.chatEventPort = chatEventPort;
+        this.createChatUseCase = createChatUseCase;
         this.listChatUseCase = listChatUseCase;
         this.chatDtoMapper = chatDtoMapper;
+        this.solicitacaoEventPublisherPort = solicitacaoEventPublisherPort;
     }
 
     @PostMapping("/cliente-para-cadastrar")
@@ -42,7 +50,7 @@ public class TestEventController {
         chat.setDataAtualizacao(LocalDateTime.now());
         chat.setDadosContexto("{\"evento\": \"ClienteParaCadastrarEvent\"}");
 
-        chatEventPort.save(chat);
+        createChatUseCase.execute(chat);
         clienteEventPublisherPort.publishClienteParaCadastrar(event);
         return ResponseEntity.ok("Chat salvo e evento de cadastro de cliente publicado com sucesso.");
     }
@@ -63,8 +71,21 @@ public class TestEventController {
         chat.setDataAtualizacao(LocalDateTime.now());
         chat.setDadosContexto("{\"evento\": \"PetParaCadastrarEvent\"}");
 
-        chatEventPort.save(chat);
+        createChatUseCase.execute(chat);
         petEventPublisherPort.publishPetParaCadastrar(event);
         return ResponseEntity.ok("Chat atualizado e evento de cadastro de pet publicado com sucesso.");
+    }
+
+    @PostMapping("/solicitacao-para-cadastrar")
+    public ResponseEntity<String> dispararEventoSolicitacao(@RequestBody SolicitacaoParaCadastrarEvent event) {
+        Chat chat = new Chat();
+        chat.setId(event.getChatId());
+        chat.setPassoAtual("AGUARDANDO_ORÇAMENTO");
+        chat.setDataAtualizacao(LocalDateTime.now());
+        chat.setDadosContexto("{\"evento\": \"SolicitacaoParaCadastrarEvent\"}");
+
+        createChatUseCase.execute(chat);
+        solicitacaoEventPublisherPort.publishSolicitacaoParaCadastrar(event);
+        return ResponseEntity.ok("Chat atualizado e evento de cadastro de solicitação publicado com sucesso.");
     }
 }

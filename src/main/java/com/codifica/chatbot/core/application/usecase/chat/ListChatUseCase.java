@@ -1,4 +1,4 @@
-package com.codifica.chatbot.core.application.usecase;
+package com.codifica.chatbot.core.application.usecase.chat;
 
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ChatRepository;
