@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,24 +11,24 @@ public class SolicitacaoParaCadastrarEvent implements Serializable {
 
     private final Integer chatId;
     private final Integer petId;
-    private final List<SolicitacaoServicoEvent> servicos;
-    private final BigDecimal valorDeslocamento;
+    private final List<Integer> servicos;
     private final LocalDateTime dataHoraInicio;
+    private final LocalDateTime dataHoraSolicitacao;
     private final String status;
 
     @JsonCreator
     public SolicitacaoParaCadastrarEvent(
             @JsonProperty("chatId") Integer chatId,
             @JsonProperty("petId") Integer petId,
-            @JsonProperty("servicos") List<SolicitacaoServicoEvent> servicos,
-            @JsonProperty("valorDeslocamento") BigDecimal valorDeslocamento,
+            @JsonProperty("servicos") List<Integer> servicos,
             @JsonProperty("dataHoraInicio") LocalDateTime dataHoraInicio,
+            @JsonProperty("dataHoraSolicitacao") LocalDateTime dataHoraSolicitacao,
             @JsonProperty("status") String status) {
         this.chatId = chatId;
         this.petId = petId;
         this.servicos = servicos;
-        this.valorDeslocamento = valorDeslocamento;
         this.dataHoraInicio = dataHoraInicio;
+        this.dataHoraSolicitacao = dataHoraSolicitacao;
         this.status = status;
     }
 
@@ -41,16 +40,16 @@ public class SolicitacaoParaCadastrarEvent implements Serializable {
         return petId;
     }
 
-    public List<SolicitacaoServicoEvent> getServicos() {
+    public List<Integer> getServicos() {
         return servicos;
-    }
-
-    public BigDecimal getValorDeslocamento() {
-        return valorDeslocamento;
     }
 
     public LocalDateTime getDataHoraInicio() {
         return dataHoraInicio;
+    }
+
+    public LocalDateTime getDataHoraSolicitacao() {
+        return dataHoraSolicitacao;
     }
 
     public String getStatus() {
