@@ -39,7 +39,7 @@ public class ClienteParaCadastrarResponseUseCase implements ClienteEventListener
                     chat.setDataAtualizacao(LocalDateTime.now());
                     chatRepository.save(chat);
 
-                    ChatClienteEntity associacao = new ChatClienteEntity(chatId, clienteId);
+                    ChatClienteEntity associacao = new ChatClienteEntity(chat, clienteId);
                     chatClienteJpaRepository.save(associacao);
 
                     logger.info("ATUALIZAÇÃO: Chat {}, Cliente {}, Passo atual {}.", chatId, clienteId, chat.getPassoAtual());

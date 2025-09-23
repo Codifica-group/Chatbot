@@ -34,6 +34,13 @@ public class ChatRepositoryImpl implements ChatRepository {
 
     @Override
     public List<Chat> findAll() {
-        return chatJpaRepository.findAll().stream().map(chatMapper::toDomain).collect(Collectors.toList());
+        return chatJpaRepository.findAllWithCliente().stream()
+                .map(chatMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        chatJpaRepository.deleteById(id);
     }
 }

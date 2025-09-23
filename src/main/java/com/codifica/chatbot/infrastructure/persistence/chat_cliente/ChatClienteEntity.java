@@ -1,9 +1,7 @@
 package com.codifica.chatbot.infrastructure.persistence.chat_cliente;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.codifica.chatbot.infrastructure.persistence.chat.ChatEntity;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "chat_cliente")
@@ -13,14 +11,19 @@ public class ChatClienteEntity {
     @Column(name = "chat_id")
     private Integer chatId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "chat_id")
+    private ChatEntity chat;
+
     @Column(name = "cliente_id", nullable = false, unique = true)
     private Integer clienteId;
 
     public ChatClienteEntity() {
     }
 
-    public ChatClienteEntity(Integer chatId, Integer clienteId) {
-        this.chatId = chatId;
+    public ChatClienteEntity(ChatEntity chat, Integer clienteId) {
+        this.chat = chat;
         this.clienteId = clienteId;
     }
 
@@ -30,6 +33,14 @@ public class ChatClienteEntity {
 
     public void setChatId(Integer chatId) {
         this.chatId = chatId;
+    }
+
+    public ChatEntity getChat() {
+        return chat;
+    }
+
+    public void setChat(ChatEntity chat) {
+        this.chat = chat;
     }
 
     public Integer getClienteId() {

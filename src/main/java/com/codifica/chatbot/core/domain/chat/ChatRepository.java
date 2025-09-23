@@ -7,4 +7,5 @@ public interface ChatRepository {
     Chat save(Chat chat);
     Optional<Chat> findById(Integer id);
     List<Chat> findAll();
+    void deleteById(Integer id);
 }

@@ -8,44 +8,36 @@ import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.cliente.ClienteParaCadastrarEvent;
 import com.codifica.chatbot.core.domain.events.pet.PetParaCadastrarEvent;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaCadastrarEvent;
-import com.codifica.chatbot.interfaces.dto.ChatDTO;
-import com.codifica.chatbot.interfaces.mappers.ChatDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/test/events")
-public class TestEventController {
+@RequestMapping("/api/events")
+public class EventController {
 
     private final ClienteEventPublisherPort clienteEventPublisherPort;
     private final CreateChatUseCase createChatUseCase;
-    private final ListChatUseCase listChatUseCase;
-    private final ChatDtoMapper chatDtoMapper;
+    private final UpdateChatUseCase updateChatUseCase;
     private final PetEventPublisherPort petEventPublisherPort;
     private final SolicitacaoEventPublisherPort solicitacaoEventPublisherPort;
 
-    public TestEventController(ClienteEventPublisherPort clienteEventPublisherPort,
-                               PetEventPublisherPort petEventPublisherPort,
-                               CreateChatUseCase createChatUseCase,
-                               ListChatUseCase listChatUseCase,
-                               ChatDtoMapper chatDtoMapper,
-                               SolicitacaoEventPublisherPort solicitacaoEventPublisherPort) {
+    public EventController(ClienteEventPublisherPort clienteEventPublisherPort,
+                           PetEventPublisherPort petEventPublisherPort,
+                           CreateChatUseCase createChatUseCase,
+                           UpdateChatUseCase updateChatUseCase,
+                           SolicitacaoEventPublisherPort solicitacaoEventPublisherPort) {
         this.clienteEventPublisherPort = clienteEventPublisherPort;
         this.petEventPublisherPort = petEventPublisherPort;
         this.createChatUseCase = createChatUseCase;
-        this.listChatUseCase = listChatUseCase;
-        this.chatDtoMapper = chatDtoMapper;
+        this.updateChatUseCase = updateChatUseCase;
         this.solicitacaoEventPublisherPort = solicitacaoEventPublisherPort;
     }
 
     @PostMapping("/cliente-para-cadastrar")
     public ResponseEntity<String> dispararEventoCliente(@RequestBody ClienteParaCadastrarEvent event) {
         Chat chat = new Chat();
-        chat.setId(event.getChatId());
         chat.setPassoAtual("AGUARDANDO_CADASTRO_DE_CLIENTE");
         chat.setDataAtualizacao(LocalDateTime.now());
         chat.setDadosContexto("{\"evento\": \"ClienteParaCadastrarEvent\"}");
@@ -55,23 +47,14 @@ public class TestEventController {
         return ResponseEntity.ok("Chat salvo e evento de cadastro de cliente publicado com sucesso.");
     }
 
-    @GetMapping("/chats")
-    public ResponseEntity<List<ChatDTO>> listChats() {
-        List<ChatDTO> chats = listChatUseCase.execute().stream()
-                .map(chatDtoMapper::toDto)
-                .collect(Collectors.toList());
-        return chats.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(chats);
-    }
-
     @PostMapping("/pet-para-cadastrar")
     public ResponseEntity<String> dispararEventoPet(@RequestBody PetParaCadastrarEvent event) {
         Chat chat = new Chat();
-        chat.setId(event.getChatId());
         chat.setPassoAtual("AGUARDANDO_CADASTRO_DE_PET");
         chat.setDataAtualizacao(LocalDateTime.now());
         chat.setDadosContexto("{\"evento\": \"PetParaCadastrarEvent\"}");
 
-        createChatUseCase.execute(chat);
+        updateChatUseCase.execute(event.getChatId(), chat);
         petEventPublisherPort.publishPetParaCadastrar(event);
         return ResponseEntity.ok("Chat atualizado e evento de cadastro de pet publicado com sucesso.");
     }
@@ -79,12 +62,11 @@ public class TestEventController {
     @PostMapping("/solicitacao-para-cadastrar")
     public ResponseEntity<String> dispararEventoSolicitacao(@RequestBody SolicitacaoParaCadastrarEvent event) {
         Chat chat = new Chat();
-        chat.setId(event.getChatId());
         chat.setPassoAtual("AGUARDANDO_ORÇAMENTO");
         chat.setDataAtualizacao(LocalDateTime.now());
         chat.setDadosContexto("{\"evento\": \"SolicitacaoParaCadastrarEvent\"}");
 
-        createChatUseCase.execute(chat);
+        updateChatUseCase.execute(event.getChatId(), chat);
         solicitacaoEventPublisherPort.publishSolicitacaoParaCadastrar(event);
         return ResponseEntity.ok("Chat atualizado e evento de cadastro de solicitação publicado com sucesso.");
     }
