@@ -1,7 +1,8 @@
 package com.codifica.chatbot.core.application.usecase;
 
 import com.codifica.chatbot.core.application.ports.in.SolicitacaoEventListenerPort;
-import com.codifica.chatbot.core.domain.chat.ChatRepository;
+import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
+import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaCadastrarResponseEvent;
 import com.codifica.chatbot.core.domain.shared.StatusEvent;
 import org.slf4j.Logger;
@@ -12,40 +13,27 @@ import java.time.LocalDateTime;
 public class SolicitacaoParaCadastrarResponseUseCase implements SolicitacaoEventListenerPort {
 
     private static final Logger logger = LoggerFactory.getLogger(SolicitacaoParaCadastrarResponseUseCase.class);
-    private final ChatRepository chatRepository;
+    private final UpdateChatUseCase updateChatUseCase;
 
-    public SolicitacaoParaCadastrarResponseUseCase(ChatRepository chatRepository) {
-        this.chatRepository = chatRepository;
+    public SolicitacaoParaCadastrarResponseUseCase(UpdateChatUseCase updateChatUseCase) {
+        this.updateChatUseCase = updateChatUseCase;
     }
 
     @Override
     public void processSolicitacaoParaCadastrarResponse(SolicitacaoParaCadastrarResponseEvent event) {
         if (event.getStatus() == StatusEvent.SUCESSO) {
-            handleSuccess(event.getChatId(), event.getSolicitacaoId());
+            logger.info("SUCESSO: Solicitacao do chatId {} cadastrada com Id: {}", event.getChatId(), event.getSolicitacaoId());
+            String passoAtual = "AGUARDANDO_ORÇAMENTO";
+            String dadosContexto = "{\"solicitacao\": \"" + event.getSolicitacaoId() + "\"}";
+            Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
+            updateChatUseCase.updateChatStatus(chat);
+            logger.info("ATUALIZAÇÃO: Chat {}, Solicitacao {}, Passo atual {}.", event.getChatId(), event.getSolicitacaoId(), passoAtual);
         } else {
-            handleFailure(event.getChatId(), event.getErro());
+            logger.error("FALHA: Erro ao cadastrar solicitacao do chatId {}: {}", event.getChatId(), event.getErro());
+            String passoAtual = "ERRO_CADASTRO_SOLICITACAO";
+            String dadosContexto = "{\"erro\": \"" + event.getErro() + "\"}";
+            Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
+            updateChatUseCase.updateChatStatus(chat);
         }
-    }
-
-    private void handleSuccess(Integer chatId, Integer solicitacaoId) {
-        logger.info("SUCESSO: Solicitacao do chatId {} cadastrada com Id: {}", chatId, solicitacaoId);
-        chatRepository.findById(chatId).ifPresentOrElse(
-                chat -> {
-                    chat.setPassoAtual("AGENDAMENTO_REALIZADO");
-                    chat.setDataAtualizacao(LocalDateTime.now());
-                    chatRepository.save(chat);
-
-                    logger.info("ATUALIZAÇÃO: Chat {}, Solicitacao {}, Passo atual {}.", chatId, solicitacaoId, chat.getPassoAtual());
-                },
-                () -> logger.error("FALHA: Chat {} não encontrado.", chatId)
-        );
-    }
-
-    private void handleFailure(Integer chatId, String erro) {
-        logger.error("FALHA: Erro ao cadastrar solicitacao do chatId {}: {}", chatId, erro);
-        chatRepository.findById(chatId).ifPresent(chat -> {
-            chat.setPassoAtual("ERRO_CADASTRO_SOLICITACAO");
-            chatRepository.save(chat);
-        });
     }
 }

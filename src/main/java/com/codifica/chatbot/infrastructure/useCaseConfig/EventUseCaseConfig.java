@@ -1,7 +1,9 @@
 package com.codifica.chatbot.infrastructure.useCaseConfig;
 
-import com.codifica.chatbot.core.application.usecase.*;
-import com.codifica.chatbot.core.domain.chat.ChatRepository;
+import com.codifica.chatbot.core.application.usecase.ClienteParaCadastrarResponseUseCase;
+import com.codifica.chatbot.core.application.usecase.PetParaCadastrarResponseUseCase;
+import com.codifica.chatbot.core.application.usecase.SolicitacaoParaCadastrarResponseUseCase;
+import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,18 +12,19 @@ public class EventUseCaseConfig {
 
     @Bean
     public ClienteParaCadastrarResponseUseCase processClienteParaCadastrarResponseUseCase(
-            ChatRepository chatRepository) {
-        return new ClienteParaCadastrarResponseUseCase(chatRepository);
+            UpdateChatUseCase updateChatUseCase) {
+        return new ClienteParaCadastrarResponseUseCase(updateChatUseCase);
     }
 
     @Bean
     public PetParaCadastrarResponseUseCase processPetParaCadastrarResponseUseCase(
-            ChatRepository chatRepository) {
-        return new PetParaCadastrarResponseUseCase(chatRepository);
+            UpdateChatUseCase updateChatUseCase) {
+        return new PetParaCadastrarResponseUseCase(updateChatUseCase);
     }
 
     @Bean
-    public SolicitacaoParaCadastrarResponseUseCase processSolicitacaoParaCadastrarResponseUseCase(ChatRepository chatRepository) {
-        return new SolicitacaoParaCadastrarResponseUseCase(chatRepository);
+    public SolicitacaoParaCadastrarResponseUseCase processSolicitacaoParaCadastrarResponseUseCase(
+            UpdateChatUseCase updateChatUseCase) {
+        return new SolicitacaoParaCadastrarResponseUseCase(updateChatUseCase);
     }
 }

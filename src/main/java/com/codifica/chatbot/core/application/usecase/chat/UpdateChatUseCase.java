@@ -23,4 +23,14 @@ public class UpdateChatUseCase {
         response.put("id", chatAtualizado.getId());
         return response;
     }
+
+    public void updateChatStatus(Chat chat) {
+        chatRepository.findById(chat.getId()).ifPresent(chatAtualizado -> {
+            if (chat.getCliente() != null) chatAtualizado.setCliente(chat.getCliente());
+            chatAtualizado.setPassoAtual(chat.getPassoAtual());
+            chatAtualizado.setDadosContexto(chat.getDadosContexto());
+            chatAtualizado.setDataAtualizacao(chat.getDataAtualizacao());
+            chatRepository.save(chatAtualizado);
+        });
+    }
 }

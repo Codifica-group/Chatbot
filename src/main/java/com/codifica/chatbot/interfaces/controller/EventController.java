@@ -4,7 +4,6 @@ import com.codifica.chatbot.core.application.ports.out.ClienteEventPublisherPort
 import com.codifica.chatbot.core.application.ports.out.PetEventPublisherPort;
 import com.codifica.chatbot.core.application.ports.out.SolicitacaoEventPublisherPort;
 import com.codifica.chatbot.core.application.usecase.chat.*;
-import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.cliente.ClienteParaCadastrarEvent;
 import com.codifica.chatbot.core.domain.events.pet.PetParaCadastrarEvent;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaCadastrarEvent;
@@ -18,56 +17,35 @@ import java.time.LocalDateTime;
 public class EventController {
 
     private final ClienteEventPublisherPort clienteEventPublisherPort;
-    private final CreateChatUseCase createChatUseCase;
     private final UpdateChatUseCase updateChatUseCase;
     private final PetEventPublisherPort petEventPublisherPort;
     private final SolicitacaoEventPublisherPort solicitacaoEventPublisherPort;
 
     public EventController(ClienteEventPublisherPort clienteEventPublisherPort,
                            PetEventPublisherPort petEventPublisherPort,
-                           CreateChatUseCase createChatUseCase,
                            UpdateChatUseCase updateChatUseCase,
                            SolicitacaoEventPublisherPort solicitacaoEventPublisherPort) {
         this.clienteEventPublisherPort = clienteEventPublisherPort;
         this.petEventPublisherPort = petEventPublisherPort;
-        this.createChatUseCase = createChatUseCase;
         this.updateChatUseCase = updateChatUseCase;
         this.solicitacaoEventPublisherPort = solicitacaoEventPublisherPort;
     }
 
     @PostMapping("/cliente-para-cadastrar")
     public ResponseEntity<String> dispararEventoCliente(@RequestBody ClienteParaCadastrarEvent event) {
-        Chat chat = new Chat();
-        chat.setPassoAtual("AGUARDANDO_CADASTRO_DE_CLIENTE");
-        chat.setDataAtualizacao(LocalDateTime.now());
-        chat.setDadosContexto("{\"evento\": \"ClienteParaCadastrarEvent\"}");
-
-        createChatUseCase.execute(chat);
         clienteEventPublisherPort.publishClienteParaCadastrar(event);
-        return ResponseEntity.ok("Chat salvo e evento de cadastro de cliente publicado com sucesso.");
+        return ResponseEntity.ok("Evento publicado.");
     }
 
     @PostMapping("/pet-para-cadastrar")
     public ResponseEntity<String> dispararEventoPet(@RequestBody PetParaCadastrarEvent event) {
-        Chat chat = new Chat();
-        chat.setPassoAtual("AGUARDANDO_CADASTRO_DE_PET");
-        chat.setDataAtualizacao(LocalDateTime.now());
-        chat.setDadosContexto("{\"evento\": \"PetParaCadastrarEvent\"}");
-
-        updateChatUseCase.execute(event.getChatId(), chat);
         petEventPublisherPort.publishPetParaCadastrar(event);
-        return ResponseEntity.ok("Chat atualizado e evento de cadastro de pet publicado com sucesso.");
+        return ResponseEntity.ok("Evento publicado.");
     }
 
     @PostMapping("/solicitacao-para-cadastrar")
     public ResponseEntity<String> dispararEventoSolicitacao(@RequestBody SolicitacaoParaCadastrarEvent event) {
-        Chat chat = new Chat();
-        chat.setPassoAtual("AGUARDANDO_ORÇAMENTO");
-        chat.setDataAtualizacao(LocalDateTime.now());
-        chat.setDadosContexto("{\"evento\": \"SolicitacaoParaCadastrarEvent\"}");
-
-        updateChatUseCase.execute(event.getChatId(), chat);
         solicitacaoEventPublisherPort.publishSolicitacaoParaCadastrar(event);
-        return ResponseEntity.ok("Chat atualizado e evento de cadastro de solicitação publicado com sucesso.");
+        return ResponseEntity.ok("Evento publicado.");
     }
 }
