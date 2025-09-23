@@ -48,12 +48,29 @@ As seguintes variáveis de ambiente precisam ser configuradas para a aplicação
 
 | Variável | Descrição                                                                                     |
 | --- |-----------------------------------------------------------------------------------------------|
-| `SPRING_PROFILES_ACTIVE` | Ativa o perfil de configuração do Spring. **Padrão:** `dev` ou `prod`.                        |
+| `SPRING_PROFILES_ACTIVE` | Ativa o perfil de configuração do Spring. **Padrão dev:** `dev-terminal`.                     |
 | `API_URL` | Endereço base da API do backend. **Padrão dev:** `http://localhost:8080/api/`.                |
 | `DB_URL` | Endereço de conexão do banco de dados. **Padrão dev:** `jdbc:mysql://localhost:3306/Chatbot`. |
 | `DB_USERNAME` | Nome de usuário do banco de dados. **Padrão dev:** `root`.                                    |
-| `DB_PASSWORD` | Senha do banco de dados. **Deve ser definida.**                                      |
+| `DB_PASSWORD` | Senha do banco de dados. **Deve ser definida.**                                               |
 | `CORS_ALLOWED_ORIGINS` | Libera o acesso à API para o frontend. **Padrão dev:** `http://localhost:5173`.               |
+
+### Perfis de Execução
+
+A aplicação utiliza um sistema de perfis modular para combinar diferentes configurações de banco de dados e interfaces de comunicação.
+
+#### Perfis Base:
+
+* `dev`: Utiliza um banco de dados H2 em memória.
+* `prod`: Utiliza um banco de dados MySQL.
+* `terminal`: Ativa a interface de linha de comando para simular conversas.
+* `telegram`: Ativa o adaptador para a API do Telegram.
+* `whatsapp`: Ativa o adaptador para a API do WhatsApp.
+
+#### Exemplos de usos:
+
+* `dev-terminal`: Usa H2 e a interface de terminal.
+* `prod-telegram`: Usa MySQL e a interface do Telegram.
 
 ### Passos para Execução
 
