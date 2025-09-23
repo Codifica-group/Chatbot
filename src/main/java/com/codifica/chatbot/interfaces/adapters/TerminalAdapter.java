@@ -1,9 +1,9 @@
 package com.codifica.chatbot.interfaces.adapters;
 
-import com.codifica.chatbot.core.application.services.ChatService;
 import com.codifica.chatbot.core.application.usecase.chat.CreateChatUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.FindChatByIdUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
+import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -18,12 +18,12 @@ public class TerminalAdapter implements CommandLineRunner {
 
     private final CreateChatUseCase createChatUseCase;
     private final FindChatByIdUseCase findChatByIdUseCase;
-    private final ChatService chatService;
+    private final ChatFlowService chatFlowService;
 
-    public TerminalAdapter(CreateChatUseCase createChatUseCase, FindChatByIdUseCase findChatByIdUseCase, ChatService chatService) {
+    public TerminalAdapter(CreateChatUseCase createChatUseCase, FindChatByIdUseCase findChatByIdUseCase, ChatFlowService chatFlowService) {
         this.createChatUseCase = createChatUseCase;
         this.findChatByIdUseCase = findChatByIdUseCase;
-        this.chatService = chatService;
+        this.chatFlowService = chatFlowService;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TerminalAdapter implements CommandLineRunner {
         Integer chatId = (Integer) response.get("id");
 
         Chat currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
-        String chatbotResponse = chatService.processMessage(currentChat, "");
+        String chatbotResponse = chatFlowService.processMessage(currentChat, "");
         System.out.println("Bot: " + chatbotResponse);
 
         while (true) {
@@ -48,7 +48,7 @@ public class TerminalAdapter implements CommandLineRunner {
             }
 
             currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
-            chatbotResponse = chatService.processMessage(currentChat, userInput);
+            chatbotResponse = chatFlowService.processMessage(currentChat, userInput);
             System.out.println("Bot: " + chatbotResponse);
 
             if ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
