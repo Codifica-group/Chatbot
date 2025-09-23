@@ -1,5 +1,6 @@
 package com.codifica.chatbot.core.domain.chat;
 
+import com.codifica.chatbot.core.domain.cliente.Cliente;
 import java.time.LocalDateTime;
 
 public class Chat {
@@ -7,14 +8,14 @@ public class Chat {
     private String passoAtual;
     private String dadosContexto;
     private LocalDateTime dataAtualizacao;
-    private Integer clienteId;
+    private Cliente cliente;
 
-    public Chat(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Integer clienteId) {
+    public Chat(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Cliente cliente) {
         this.id = id;
         this.passoAtual = passoAtual;
         this.dadosContexto = dadosContexto;
         this.dataAtualizacao = dataAtualizacao;
-        this.clienteId = clienteId;
+        this.cliente = cliente;
     }
 
     public Chat() {}
@@ -51,11 +52,11 @@ public class Chat {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public Integer getClienteId() {
-        return clienteId;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setClienteId(Integer clienteId) {
-        this.clienteId = clienteId;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

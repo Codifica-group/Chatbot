@@ -1,6 +1,7 @@
 package com.codifica.chatbot.interfaces.mappers;
 
 import com.codifica.chatbot.core.domain.chat.Chat;
+import com.codifica.chatbot.core.domain.cliente.Cliente;
 import com.codifica.chatbot.interfaces.dto.ChatDTO;
 import org.springframework.stereotype.Component;
 
@@ -14,20 +15,27 @@ public class ChatDtoMapper {
                 domain.getPassoAtual(),
                 domain.getDadosContexto(),
                 domain.getDataAtualizacao(),
-                domain.getClienteId()
+                domain.getCliente() != null ? domain.getCliente().getId() : null,
+                domain.getCliente() != null ? domain.getCliente().getNome() : null
         );
     }
 
     public Chat toDomain(ChatDTO dto) {
-        LocalDateTime dataAtualizacao = dto.getDataAtualizacao() != null ? dto.getDataAtualizacao() : LocalDateTime.now();
+        LocalDateTime dataAtualizacao = dto.getDataAtualizacao() != null
+                ? dto.getDataAtualizacao()
+                : LocalDateTime.now();
+
+        Cliente cliente = dto.getClienteId() != null
+                ? new Cliente(dto.getClienteId(), dto.getClienteNome())
+                : null;
+
         Chat chat = new Chat(
                 dto.getId(),
                 dto.getPassoAtual(),
                 dto.getDadosContexto(),
                 dataAtualizacao,
-                dto.getClienteId()
+                cliente
         );
-
         if (dto.getId() == null) {
             chat.setId(null);
         }

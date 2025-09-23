@@ -2,7 +2,6 @@ package com.codifica.chatbot.infrastructure.useCaseConfig;
 
 import com.codifica.chatbot.core.application.usecase.*;
 import com.codifica.chatbot.core.domain.chat.ChatRepository;
-import com.codifica.chatbot.infrastructure.persistence.chat_cliente.ChatClienteJpaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,9 +10,8 @@ public class EventUseCaseConfig {
 
     @Bean
     public ClienteParaCadastrarResponseUseCase processClienteParaCadastrarResponseUseCase(
-            ChatRepository chatRepository,
-            ChatClienteJpaRepository chatClienteJpaRepository) {
-        return new ClienteParaCadastrarResponseUseCase(chatRepository, chatClienteJpaRepository);
+            ChatRepository chatRepository) {
+        return new ClienteParaCadastrarResponseUseCase(chatRepository);
     }
 
     @Bean

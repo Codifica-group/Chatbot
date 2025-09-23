@@ -9,6 +9,7 @@ public class ClienteParaCadastrarResponseEvent implements Serializable {
     private StatusEvent status;
     private Integer chatId;
     private Integer clienteId;
+    private String clienteNome;
     private String erro;
 
     public StatusEvent getStatus() {
@@ -21,6 +22,10 @@ public class ClienteParaCadastrarResponseEvent implements Serializable {
 
     public Integer getClienteId() {
         return clienteId;
+    }
+
+    public String getClienteNome() {
+        return clienteNome;
     }
 
     public String getErro() {

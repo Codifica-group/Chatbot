@@ -8,13 +8,15 @@ public class ChatDTO {
     private String dadosContexto;
     private LocalDateTime dataAtualizacao;
     private Integer clienteId;
+    private String clienteNome;
 
-    public ChatDTO(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Integer clienteId) {
+    public ChatDTO(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Integer clienteId, String clienteNome) {
         this.id = id;
         this.passoAtual = passoAtual;
         this.dadosContexto = dadosContexto;
         this.dataAtualizacao = dataAtualizacao;
         this.clienteId = clienteId;
+        this.clienteNome = clienteNome;
     }
 
     public ChatDTO() {}
@@ -57,5 +59,13 @@ public class ChatDTO {
 
     public void setClienteId(Integer clienteId) {
         this.clienteId = clienteId;
+    }
+
+    public String getClienteNome() {
+        return clienteNome;
+    }
+
+    public void setClienteNome(String clienteNome) {
+        this.clienteNome = clienteNome;
     }
 }

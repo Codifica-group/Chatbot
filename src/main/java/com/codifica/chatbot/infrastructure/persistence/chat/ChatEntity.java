@@ -1,6 +1,6 @@
 package com.codifica.chatbot.infrastructure.persistence.chat;
 
-import com.codifica.chatbot.infrastructure.persistence.chat_cliente.ChatClienteEntity;
+import com.codifica.chatbot.infrastructure.persistence.cliente.ClienteEntity;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
@@ -25,8 +25,9 @@ public class ChatEntity {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-    @OneToOne(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private ChatClienteEntity chatCliente;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cliente_id")
+    private ClienteEntity cliente;
 
     public ChatEntity(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao) {
         this.id = id;
@@ -69,18 +70,11 @@ public class ChatEntity {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public ChatClienteEntity getChatCliente() {
-        return chatCliente;
+    public ClienteEntity getCliente() {
+        return cliente;
     }
 
-    public void setChatCliente(ChatClienteEntity chatCliente) {
-        if (chatCliente == null) {
-            if (this.chatCliente != null) {
-                this.chatCliente.setChat(null);
-            }
-        } else {
-            chatCliente.setChat(this);
-        }
-        this.chatCliente = chatCliente;
+    public void setCliente(ClienteEntity cliente) {
+        this.cliente = cliente;
     }
 }
