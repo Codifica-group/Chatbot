@@ -2,6 +2,7 @@ package com.codifica.chatbot.interfaces.adapters;
 
 import com.codifica.chatbot.core.application.usecase.chat.CreateChatUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.FindChatByIdUseCase;
+import com.codifica.chatbot.core.application.usecase.chat.ListChatUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,47 +20,70 @@ public class TerminalAdapter implements CommandLineRunner {
 
     private final CreateChatUseCase createChatUseCase;
     private final FindChatByIdUseCase findChatByIdUseCase;
+    private final ListChatUseCase listChatUseCase;
     private final ChatFlowService chatFlowService;
 
-    public TerminalAdapter(CreateChatUseCase createChatUseCase, FindChatByIdUseCase findChatByIdUseCase, ChatFlowService chatFlowService) {
+    public TerminalAdapter(CreateChatUseCase createChatUseCase, FindChatByIdUseCase findChatByIdUseCase, ListChatUseCase listChatUseCase, ChatFlowService chatFlowService) {
         this.createChatUseCase = createChatUseCase;
         this.findChatByIdUseCase = findChatByIdUseCase;
+        this.listChatUseCase = listChatUseCase;
         this.chatFlowService = chatFlowService;
     }
 
     @Override
     public void run(String... args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("--- Chatbot Terminal Iniciado (digite 'sair' para encerrar) ---");
+        System.out.println("--- Chatbot Terminal Iniciado (digite 'sair' para trocar de chat ou encerrar) ---");
 
-        Chat chatInicial = new Chat(null, "INICIO", "{}", LocalDateTime.now(), null);
-        Map<String, Object> response = createChatUseCase.execute(chatInicial);
-        Integer chatId = (Integer) response.get("id");
-
-        Chat currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
-        String chatbotResponse = chatFlowService.processMessage(currentChat, "");
-        System.out.println("Bot: " + chatbotResponse);
+        Chat currentChat = null;
 
         while (true) {
+            if (currentChat == null) {
+                System.out.println("\nSelecione um chat:");
+                System.out.println("0 - Novo Chat");
+                List<Chat> chats = listChatUseCase.execute();
+                for (int i = 0; i < chats.size(); i++) {
+                    System.out.printf("%d - Chat %d (Passo: %s)\n", i + 1, chats.get(i).getId(), chats.get(i).getPassoAtual());
+                }
+                System.out.println(chats.size() + 1 + " - Encerrar simulação");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+
+                if (choice == 0) {
+                    Chat chatInicial = new Chat(null, "INICIO", "{}", LocalDateTime.now(), null);
+                    Map<String, Object> response = createChatUseCase.execute(chatInicial);
+                    Integer chatId = (Integer) response.get("id");
+                    currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
+                    String chatbotResponse = chatFlowService.processMessage(currentChat, "");
+                    System.out.println("Bot: " + chatbotResponse);
+                } else if (choice > 0 && choice <= chats.size()) {
+                    currentChat = chats.get(choice - 1);
+                    System.out.println("Continuando chat " + currentChat.getId() + " no passo " + currentChat.getPassoAtual());
+                } else {
+                    break;
+                }
+            }
+
             System.out.print("Você: ");
             String userInput = scanner.nextLine();
 
             if ("sair".equalsIgnoreCase(userInput)) {
-                break;
+                currentChat = null;
+                continue;
             }
 
-            currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
-            chatbotResponse = chatFlowService.processMessage(currentChat, userInput);
+            String chatbotResponse = chatFlowService.processMessage(currentChat, userInput);
             System.out.println("Bot: " + chatbotResponse);
 
-            currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
+            currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
 
             if ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
                 System.out.println("\n[Simulação] Aguardando resposta do evento de cadastro de cliente...");
 
                 while ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
                     Thread.sleep(1000);
-                    currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
+                    currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
                 }
 
                 System.out.println("[Simulação] Evento de cliente recebido! Continuando fluxo...");
@@ -69,7 +94,7 @@ public class TerminalAdapter implements CommandLineRunner {
 
             if ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
                 System.out.println("\n[Simulação] O fluxo de cadastro de pet foi iniciado. O chatbot agora aguarda a resposta do backend.");
-                break;
+                currentChat = null;
             }
         }
 
