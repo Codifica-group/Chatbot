@@ -6,6 +6,7 @@ import com.codifica.chatbot.core.domain.chat.StepResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AskForPetBreedStepHandler implements ConversationStep {
@@ -19,7 +20,13 @@ public class AskForPetBreedStepHandler implements ConversationStep {
     @Override
     public StepResponse process(Chat chat, String userMessage) {
         try {
-            Map<String, String> dadosContexto = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
+            Map<String, String> dadosContexto;
+            if (chat.getDadosContexto() == null || chat.getDadosContexto().isEmpty() || chat.getDadosContexto().equals("{}")) {
+                dadosContexto = new HashMap<>();
+            } else {
+                dadosContexto = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
+            }
+
             dadosContexto.put("pet_nome", userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 

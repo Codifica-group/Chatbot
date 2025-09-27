@@ -8,6 +8,9 @@ import com.codifica.chatbot.core.domain.shared.Dia;
 import com.codifica.chatbot.infrastructure.services.MainBackendService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,8 +18,9 @@ import java.util.Map;
 
 public class ListAvailableDaysStepHandler implements ConversationStep {
 
+    private static final Logger logger = LoggerFactory.getLogger(ListAvailableDaysStepHandler.class);
     private final MainBackendService mainBackendService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public ListAvailableDaysStepHandler(MainBackendService mainBackendService) {
         this.mainBackendService = mainBackendService;
@@ -31,23 +35,25 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
     public StepResponse process(Chat chat, String userMessage) {
         try {
             Map<String, Object> context = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
-            List<Pet> pets = (List<Pet>) context.get("pets");
+            List<Pet> pets = objectMapper.convertValue(context.get("pets"), new TypeReference<List<Pet>>() {});
             int choice = Integer.parseInt(userMessage) - 1;
 
             if (choice == pets.size()) {
+                chat.setDadosContexto("{}");
                 return new StepResponse("Ok, vamos cadastrar um novo pet. Qual o nome dele?", "AGUARDANDO_NOME_PET");
             }
 
-            if (choice < 0 || choice > pets.size()) {
+            if (choice < 0 || choice >= pets.size()) {
                 return new StepResponse("Opção inválida, por favor, tente novamente.", getStepName());
             }
 
             context.put("petId", pets.get(choice).getId());
+            context.remove("pets");
 
             LocalDate startDate = LocalDate.now();
             List<Dia> availableDays = mainBackendService.getAvailableDays(startDate, startDate.plusDays(14));
             context.put("availableDays", availableDays);
-            context.put("lastDate", startDate.plusDays(14));
+            context.put("lastDate", startDate.plusDays(14).toString());
             chat.setDadosContexto(objectMapper.writeValueAsString(context));
 
             StringBuilder response = new StringBuilder("Ótimo! Aqui estão os dias disponíveis para agendamento:\n");
@@ -59,6 +65,7 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
             return new StepResponse(response.toString(), "AGUARDANDO_ESCOLHA_DIA");
 
         } catch (Exception e) {
+             logger.error("FALHA: Erro ao processar escolha do pet:", e);
             return new StepResponse("Ocorreu um erro ao processar sua escolha. Tente novamente.", getStepName());
         }
     }

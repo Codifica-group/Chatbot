@@ -12,6 +12,8 @@ public class Dia {
         this.diaSemana = diaSemana;
     }
 
+    public Dia() {}
+
     public LocalDate getData() {
         return data;
     }

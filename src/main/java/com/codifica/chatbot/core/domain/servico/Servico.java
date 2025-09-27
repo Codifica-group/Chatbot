@@ -14,6 +14,8 @@ public class Servico {
         this.valor = valor;
     }
 
+    public Servico() {}
+
     public Integer getId() {
         return id;
     }

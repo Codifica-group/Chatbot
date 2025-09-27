@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,7 +45,11 @@ public class MainBackendService {
     }
 
     public List<Dia> getAvailableDays(LocalDate startDate, LocalDate endDate) {
-        String url = apiUrl + "agendas/disponibilidade/dias";
+        String url = UriComponentsBuilder.fromHttpUrl(apiUrl + "agendas/disponibilidade/dias")
+                .queryParam("inicio", startDate.toString())
+                .queryParam("fim", endDate.toString())
+                .toUriString();
+
         ResponseEntity<List<Dia>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,

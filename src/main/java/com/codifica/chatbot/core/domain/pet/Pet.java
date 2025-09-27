@@ -10,6 +10,8 @@ public class Pet {
         this.nome = nome;
     }
 
+    public Pet() {}
+
     public Integer getId() {
         return id;
     }
