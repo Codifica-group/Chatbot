@@ -93,7 +93,18 @@ public class TerminalAdapter implements CommandLineRunner {
             }
 
             if ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
-                System.out.println("\n[Simulação] O fluxo de cadastro de pet foi iniciado. O chatbot agora aguarda a resposta do backend.");
+                System.out.println("\n[Simulação] Aguardando resposta do evento de cadastro de pet...");
+                while ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
+                    Thread.sleep(1000);
+                    currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
+                }
+                System.out.println("[Simulação] Evento de pet recebido! Continuando fluxo...");
+                chatbotResponse = chatFlowService.processMessage(currentChat, "");
+                System.out.println("Bot: " + chatbotResponse);
+            }
+
+            if ("AGUARDANDO_CONFIRMACAO_AGENDAMENTO".equals(currentChat.getPassoAtual())) {
+                System.out.println("\n[Simulação] O fluxo de agendamento foi iniciado. O chatbot agora aguarda a resposta do backend.");
                 currentChat = null;
             }
         }
