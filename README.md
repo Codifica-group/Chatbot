@@ -50,6 +50,7 @@ As seguintes variáveis de ambiente precisam ser configuradas para a aplicação
 | --- |-----------------------------------------------------------------------------------------------|
 | `SPRING_PROFILES_ACTIVE` | Ativa o perfil de configuração do Spring. **Padrão dev:** `dev-terminal`.                     |
 | `API_URL` | Endereço base da API do backend. **Padrão dev:** `http://localhost:8080/api/`.                |
+| `INTERNAL_API_KEY`       | Chave da API interna para conexão com microsserviço Chatbot. **Deve ser definida.**         |
 | `DB_URL` | Endereço de conexão do banco de dados. **Padrão dev:** `jdbc:mysql://localhost:3306/Chatbot`. |
 | `DB_USERNAME` | Nome de usuário do banco de dados. **Padrão dev:** `root`.                                    |
 | `DB_PASSWORD` | Senha do banco de dados. **Deve ser definida.**                                               |
