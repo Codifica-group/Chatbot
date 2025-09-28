@@ -4,6 +4,7 @@ import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
 import com.codifica.chatbot.core.domain.servico.Servico;
+import com.codifica.chatbot.core.domain.shared.Dia;
 import com.codifica.chatbot.infrastructure.services.MainBackendService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,11 +38,17 @@ public class ListServicesStepHandler implements ConversationStep {
             int timeChoice = Integer.parseInt(userMessage.trim()) - 1;
 
             if (timeChoice == availableTimes.size()) {
-                context.remove("availableDays");
-                context.remove("lastDate");
+                context.remove("chosenDay");
                 context.remove("availableTimes");
                 chat.setDadosContexto(objectMapper.writeValueAsString(context));
-                return new StepResponse("Tudo bem. Vamos tentar novamente.", "AGUARDANDO_ESCOLHA_PET");
+
+                StringBuilder response = new StringBuilder("Sem problemas! Aqui estão mais alguns dias disponíveis:\n");
+                List<Dia> availableDays = objectMapper.convertValue(context.get("availableDays"), new TypeReference<List<Dia>>() {});
+                for (int i = 0; i < availableDays.size(); i++) {
+                    response.append(String.format("%d - %s - %s\n", i + 1, availableDays.get(i).getData(), availableDays.get(i).getDiaSemana()));
+                }
+                response.append(String.format("%d - Ver mais datas", availableDays.size() + 1));
+                return new StepResponse(response.toString(), "AGUARDANDO_ESCOLHA_DIA");
             }
 
             if (timeChoice < 0 || timeChoice >= availableTimes.size()) {
