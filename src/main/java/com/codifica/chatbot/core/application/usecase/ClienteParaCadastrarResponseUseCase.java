@@ -26,7 +26,7 @@ public class ClienteParaCadastrarResponseUseCase implements ClienteEventListener
         if (event.getStatus() == StatusEvent.SUCESSO) {
             logger.info("SUCESSO: Cliente do chatId {} cadastrado com Id: {}", event.getChatId(), event.getClienteId());
             String passoAtual = "AGUARDANDO_CADASTRO_PET";
-            String dadosContexto = "{\"status\": \"Cliente cadastrado\"}";
+            String dadosContexto = "{}";
             Cliente cliente = new Cliente(event.getClienteId(), event.getClienteNome());
             Chat chat = new Chat(event.getChatId(),  passoAtual, dadosContexto, LocalDateTime.now(), cliente);
             updateChatUseCase.updateChatStatus(chat);

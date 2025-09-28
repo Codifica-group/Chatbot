@@ -25,8 +25,8 @@ public class ChatEntity {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "cliente_id")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteEntity cliente;
 
     public ChatEntity(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao) {

@@ -1,10 +1,12 @@
 package com.codifica.chatbot.interfaces.adapters;
 
+import com.codifica.chatbot.config.DevDataInitializer;
 import com.codifica.chatbot.core.application.usecase.chat.CreateChatUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.FindChatByIdUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.ListChatUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -18,20 +20,24 @@ import java.util.Scanner;
 @Profile("terminal")
 public class TerminalAdapter implements CommandLineRunner {
 
-    private final CreateChatUseCase createChatUseCase;
-    private final FindChatByIdUseCase findChatByIdUseCase;
-    private final ListChatUseCase listChatUseCase;
-    private final ChatFlowService chatFlowService;
+    @Autowired
+    private CreateChatUseCase createChatUseCase;
 
-    public TerminalAdapter(CreateChatUseCase createChatUseCase, FindChatByIdUseCase findChatByIdUseCase, ListChatUseCase listChatUseCase, ChatFlowService chatFlowService) {
-        this.createChatUseCase = createChatUseCase;
-        this.findChatByIdUseCase = findChatByIdUseCase;
-        this.listChatUseCase = listChatUseCase;
-        this.chatFlowService = chatFlowService;
-    }
+    @Autowired
+    private FindChatByIdUseCase findChatByIdUseCase;
+
+    @Autowired
+    private ListChatUseCase listChatUseCase;
+
+    @Autowired
+    private ChatFlowService chatFlowService;
+
+    @Autowired
+    private DevDataInitializer devDataInitializer;
 
     @Override
     public void run(String... args) throws Exception {
+        devDataInitializer.initDatabase();
         Scanner scanner = new Scanner(System.in);
         System.out.println("--- Chatbot Terminal Iniciado (digite 'sair' para trocar de chat ou encerrar) ---");
 
@@ -59,7 +65,7 @@ public class TerminalAdapter implements CommandLineRunner {
                     System.out.println("Bot: " + chatbotResponse);
                 } else if (choice > 0 && choice <= chats.size()) {
                     currentChat = chats.get(choice - 1);
-                    System.out.println("Continuando chat " + currentChat.getId() + " no passo " + currentChat.getPassoAtual());
+                    System.out.println("Continuando chat " + currentChat.getId() + " no passo " + currentChat.getPassoAtual() + " Digite 'oi'");
                 } else {
                     break;
                 }
