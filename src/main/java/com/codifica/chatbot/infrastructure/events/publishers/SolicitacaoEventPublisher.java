@@ -2,6 +2,7 @@ package com.codifica.chatbot.infrastructure.events.publishers;
 
 import com.codifica.chatbot.core.application.ports.out.SolicitacaoEventPublisherPort;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaCadastrarEvent;
+import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaAtualizarEvent;
 import com.codifica.chatbot.infrastructure.rabbitMQ.RabbitMQConfig;
 import com.codifica.chatbot.infrastructure.rabbitMQ.SolicitacaoRabbitMQConfig;
 import org.slf4j.Logger;
@@ -25,6 +26,16 @@ public class SolicitacaoEventPublisher implements SolicitacaoEventPublisherPort 
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.EXCHANGE_NAME,
                 SolicitacaoRabbitMQConfig.ROUTING_KEY_SOLICITACAO_PARA_CADASTRAR,
+                event
+        );
+    }
+
+    @Override
+    public void publishSolicitacaoParaAtualizar(SolicitacaoParaAtualizarEvent event) {
+        logger.info("EVENTO PUBLICADO: Solicitacao Para Atualizar com chatId: {}", event.getChatId());
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE_NAME,
+                "solicitacao.para-atualizar",
                 event
         );
     }
