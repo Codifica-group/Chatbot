@@ -14,10 +14,6 @@ public class SolicitacaoRabbitMQConfig {
     public static final String ROUTING_KEY_SOLICITACAO_PARA_CADASTRAR = "solicitacao.para-cadastrar";
     public static final String QUEUE_SOLICITACAO_RESPONSE = "solicitacao.cadastro.response.queue";
     public static final String ROUTING_KEY_SOLICITACAO_RESPONSE = "solicitacao.cadastro.response";
-    public static final String QUEUE_SOLICITACAO_ATUALIZADA = "solicitacao.atualizada.queue";
-    public static final String ROUTING_KEY_SOLICITACAO_ATUALIZADA = "solicitacao.atualizada";
-    public static final String QUEUE_SOLICITACAO_PARA_ATUALIZAR = "solicitacao.para-atualizar.queue";
-    public static final String ROUTING_KEY_SOLICITACAO_PARA_ATUALIZAR = "solicitacao.para-atualizar";
 
     @Bean
     public Queue solicitacaoParaCadastrarQueue() {
@@ -37,25 +33,5 @@ public class SolicitacaoRabbitMQConfig {
     @Bean
     public Binding solicitacaoResponseBinding(Queue solicitacaoResponseQueue, TopicExchange exchange) {
         return BindingBuilder.bind(solicitacaoResponseQueue).to(exchange).with(ROUTING_KEY_SOLICITACAO_RESPONSE);
-    }
-
-    @Bean
-    public Queue solicitacaoAtualizadaQueue() {
-        return new Queue(QUEUE_SOLICITACAO_ATUALIZADA, true);
-    }
-
-    @Bean
-    public Binding solicitacaoAtualizadaBinding(Queue solicitacaoAtualizadaQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(solicitacaoAtualizadaQueue).to(exchange).with(ROUTING_KEY_SOLICITACAO_ATUALIZADA);
-    }
-
-    @Bean
-    public Queue solicitacaoParaAtualizarQueue() {
-        return new Queue(QUEUE_SOLICITACAO_PARA_ATUALIZAR, true);
-    }
-
-    @Bean
-    public Binding solicitacaoParaAtualizarBinding(Queue solicitacaoParaAtualizarQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(solicitacaoParaAtualizarQueue).to(exchange).with(ROUTING_KEY_SOLICITACAO_PARA_ATUALIZAR);
     }
 }

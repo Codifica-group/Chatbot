@@ -111,11 +111,7 @@ public class TerminalAdapter implements CommandLineRunner {
 
             if ("AGUARDANDO_CONFIRMACAO_AGENDAMENTO".equals(currentChat.getPassoAtual())) {
                 System.out.println("\n[Simulação] O fluxo de agendamento foi iniciado. O chatbot agora aguarda a resposta do backend.");
-            }
-
-            if ("ACEITO_PELO_USUARIO".equals(currentChat.getPassoAtual())) {
-                chatbotResponse = chatFlowService.processMessage(currentChat, "");
-                System.out.println("Bot: " + chatbotResponse);
+                currentChat = null;
             }
         }
 

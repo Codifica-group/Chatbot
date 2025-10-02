@@ -2,7 +2,7 @@ package com.codifica.chatbot.infrastructure.useCaseConfig;
 
 import com.codifica.chatbot.core.application.usecase.ClienteParaCadastrarResponseUseCase;
 import com.codifica.chatbot.core.application.usecase.PetParaCadastrarResponseUseCase;
-import com.codifica.chatbot.core.application.usecase.SolicitacaoResponseUseCase;
+import com.codifica.chatbot.core.application.usecase.SolicitacaoParaCadastrarResponseUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +23,8 @@ public class EventUseCaseConfig {
     }
 
     @Bean
-    public SolicitacaoResponseUseCase processSolicitacaoParaCadastrarResponseUseCase(
+    public SolicitacaoParaCadastrarResponseUseCase processSolicitacaoParaCadastrarResponseUseCase(
             UpdateChatUseCase updateChatUseCase) {
-        return new SolicitacaoResponseUseCase(updateChatUseCase);
+        return new SolicitacaoParaCadastrarResponseUseCase(updateChatUseCase);
     }
 }
