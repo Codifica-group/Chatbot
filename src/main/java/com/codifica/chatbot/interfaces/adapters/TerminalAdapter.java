@@ -65,7 +65,14 @@ public class TerminalAdapter implements CommandLineRunner {
                     System.out.println("Bot: " + chatbotResponse);
                 } else if (choice > 0 && choice <= chats.size()) {
                     currentChat = chats.get(choice - 1);
-                    System.out.println("Continuando chat " + currentChat.getId() + " no passo " + currentChat.getPassoAtual() + " Digite 'oi'");
+                    System.out.println("Continuando chat " + currentChat.getId() + " no passo " + currentChat.getPassoAtual() + ". Digite 'oi' para continuar de onde parou ou aguarde se um evento estiver pendente.");
+
+                    // Verifica se o chat está aguardando um evento para já processá-lo
+                    if (!"INICIO".equals(currentChat.getPassoAtual()) && !"AGUARDANDO_NOME_CLIENTE".equals(currentChat.getPassoAtual())) {
+                        handleAsyncEvents(currentChat);
+                        continue;
+                    }
+
                 } else {
                     break;
                 }
@@ -84,38 +91,62 @@ public class TerminalAdapter implements CommandLineRunner {
 
             currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
 
-            if ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
-                System.out.println("\n[Simulação] Aguardando resposta do evento de cadastro de cliente...");
+            handleAsyncEvents(currentChat);
 
-                while ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
-                    Thread.sleep(1000);
-                    currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
-                }
-
-                System.out.println("[Simulação] Evento de cliente recebido! Continuando fluxo...");
-
-                chatbotResponse = chatFlowService.processMessage(currentChat, "");
-                System.out.println("Bot: " + chatbotResponse);
-            }
-
-            if ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
-                System.out.println("\n[Simulação] Aguardando resposta do evento de cadastro de pet...");
-                while ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
-                    Thread.sleep(1000);
-                    currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
-                }
-                System.out.println("[Simulação] Evento de pet recebido! Continuando fluxo...");
-                chatbotResponse = chatFlowService.processMessage(currentChat, "");
-                System.out.println("Bot: " + chatbotResponse);
-            }
-
-            if ("AGUARDANDO_CONFIRMACAO_AGENDAMENTO".equals(currentChat.getPassoAtual())) {
-                System.out.println("\n[Simulação] O fluxo de agendamento foi iniciado. O chatbot agora aguarda a resposta do backend.");
+            if ("FIM".equals(currentChat.getPassoAtual())) {
                 currentChat = null;
             }
         }
 
         scanner.close();
         System.out.println("--- Conversa Finalizada ---");
+    }
+
+    private void handleAsyncEvents(Chat currentChat) throws InterruptedException {
+        String chatbotResponse;
+
+        if ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
+            System.out.println("\n[Simulação] Aguardando resposta do evento de cadastro de cliente...");
+
+            while ("AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE".equals(currentChat.getPassoAtual())) {
+                Thread.sleep(1000);
+                currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
+            }
+
+            System.out.println("[Simulação] Evento de cliente recebido! Continuando fluxo...");
+
+            chatbotResponse = chatFlowService.processMessage(currentChat, "");
+            System.out.println("Bot: " + chatbotResponse);
+        }
+
+        if ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
+            System.out.println("\n[Simulação] Aguardando resposta do evento de cadastro de pet...");
+            while ("AGUARDANDO_RESPOSTA_CADASTRO_PET".equals(currentChat.getPassoAtual())) {
+                Thread.sleep(1000);
+                currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
+            }
+            System.out.println("[Simulação] Evento de pet recebido! Continuando fluxo...");
+            chatbotResponse = chatFlowService.processMessage(currentChat, "");
+            System.out.println("Bot: " + chatbotResponse);
+        }
+
+        if ("AGUARDANDO_CONFIRMACAO_AGENDAMENTO".equals(currentChat.getPassoAtual())) {
+            System.out.println("\n[Simulação] O fluxo de agendamento foi iniciado. O chatbot agora aguarda a resposta do backend.");
+            while ("AGUARDANDO_CONFIRMACAO_AGENDAMENTO".equals(currentChat.getPassoAtual())) {
+                Thread.sleep(1000);
+                currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
+            }
+        }
+
+        if ("AGUARDANDO_ORÇAMENTO".equals(currentChat.getPassoAtual())) {
+            System.out.println("\n[Simulação] Aguardando resposta do petshop sobre o orçamento...");
+            while ("AGUARDANDO_ORÇAMENTO".equals(currentChat.getPassoAtual())) {
+                Thread.sleep(1000);
+                currentChat = findChatByIdUseCase.execute(currentChat.getId()).orElseThrow();
+            }
+            System.out.println("\n[Simulação] Resposta do petshop recebida!");
+            chatbotResponse = chatFlowService.processMessage(currentChat, "");
+            System.out.println("Bot: " + chatbotResponse);
+        }
     }
 }

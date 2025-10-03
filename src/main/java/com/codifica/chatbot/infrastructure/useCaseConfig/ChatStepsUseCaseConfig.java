@@ -83,4 +83,9 @@ public class ChatStepsUseCaseConfig {
     public ConversationStep publishSolicitationStepHandler(SolicitacaoEventPublisherPort solicitacaoEventPublisherPort) {
         return new PublishSolicitationStepHandler(solicitacaoEventPublisherPort);
     }
+
+    @Bean
+    public ConversationStep solicitacaoAtualizadaStepHandler() {
+        return new SolicitacaoAtualizadaStepHandler();
+    }
 }
