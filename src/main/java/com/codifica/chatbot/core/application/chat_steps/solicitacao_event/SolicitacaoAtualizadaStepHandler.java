@@ -45,7 +45,7 @@ public class SolicitacaoAtualizadaStepHandler implements ConversationStep {
                 mensagem += "Por favor, confirme o agendamento:\n";
                 mensagem += "1. Confirmar\n";
                 mensagem += "2. Recusar";
-                return new StepResponse(mensagem, "AGUARDANDO_CONFIRMACAO_FINAL_USUARIO");
+                return new StepResponse(mensagem, "AGUARDANDO_CONFIRMACAO_CLIENTE");
             } else {
                 return new StepResponse("Infelizmente, o petshop não pôde aceitar sua solicitação de agendamento no momento.", "FIM");
             }

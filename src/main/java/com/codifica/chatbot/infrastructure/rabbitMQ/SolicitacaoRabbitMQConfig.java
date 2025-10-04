@@ -16,6 +16,10 @@ public class SolicitacaoRabbitMQConfig {
     public static final String ROUTING_KEY_SOLICITACAO_RESPONSE = "solicitacao.cadastro.response";
     public static final String QUEUE_SOLICITACAO_ATUALIZADA = "solicitacao.atualizada.queue";
     public static final String ROUTING_KEY_SOLICITACAO_ATUALIZADA = "solicitacao.atualizada";
+    public static final String QUEUE_SOLICITACAO_ACEITA = "solicitacao.aceita.queue";
+    public static final String ROUTING_KEY_SOLICITACAO_ACEITA = "solicitacao.aceita";
+    public static final String QUEUE_SOLICITACAO_ACEITA_RESPONSE = "solicitacao.aceita.response.queue";
+    public static final String ROUTING_KEY_SOLICITACAO_ACEITA_RESPONSE = "solicitacao.aceita.response";
 
 
     @Bean
@@ -46,5 +50,25 @@ public class SolicitacaoRabbitMQConfig {
     @Bean
     public Binding solicitacaoAtualizadaBinding(Queue solicitacaoAtualizadaQueue, TopicExchange exchange) {
         return BindingBuilder.bind(solicitacaoAtualizadaQueue).to(exchange).with(ROUTING_KEY_SOLICITACAO_ATUALIZADA);
+    }
+
+    @Bean
+    public Queue solicitacaoAceitaQueue() {
+        return new Queue(QUEUE_SOLICITACAO_ACEITA, true);
+    }
+
+    @Bean
+    public Binding solicitacaoAceitaBinding(Queue solicitacaoAceitaQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(solicitacaoAceitaQueue).to(exchange).with(ROUTING_KEY_SOLICITACAO_ACEITA);
+    }
+
+    @Bean
+    public Queue solicitacaoAceitaResponseQueue() {
+        return new Queue(QUEUE_SOLICITACAO_ACEITA_RESPONSE, true);
+    }
+
+    @Bean
+    public Binding solicitacaoAceitaResponseBinding(Queue solicitacaoAceitaResponseQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(solicitacaoAceitaResponseQueue).to(exchange).with(ROUTING_KEY_SOLICITACAO_ACEITA_RESPONSE);
     }
 }

@@ -62,7 +62,7 @@ public class PublishSolicitationStepHandler implements ConversationStep {
             solicitacaoEventPublisherPort.publishSolicitacaoParaCadastrar(event);
             chat.setDadosContexto("{}");
 
-            return new StepResponse("Sua solicitação foi enviada com sucesso! Em breve você receberá a confirmação.", "AGUARDANDO_CONFIRMACAO_AGENDAMENTO");
+            return new StepResponse("Sua solicitação foi enviada com sucesso! Em breve você receberá a confirmação.", "AGUARDANDO_ORÇAMENTO");
 
         } catch (Exception e) {
             logger.error("FALHA: Erro ao processar escolha dos serviços: ", e);

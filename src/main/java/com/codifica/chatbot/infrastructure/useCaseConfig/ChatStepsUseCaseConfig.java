@@ -5,7 +5,9 @@ import com.codifica.chatbot.core.application.chat_steps.pet_event.*;
 import com.codifica.chatbot.core.application.chat_steps.solicitacao_event.*;
 import com.codifica.chatbot.core.application.ports.out.ClienteEventPublisherPort;
 import com.codifica.chatbot.core.application.ports.out.PetEventPublisherPort;
+import com.codifica.chatbot.core.application.ports.out.SolicitacaoAceitaEventPublisherPort;
 import com.codifica.chatbot.core.application.ports.out.SolicitacaoEventPublisherPort;
+import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.infrastructure.services.MainBackendService;
 import org.springframework.context.annotation.Bean;
@@ -87,5 +89,15 @@ public class ChatStepsUseCaseConfig {
     @Bean
     public ConversationStep solicitacaoAtualizadaStepHandler() {
         return new SolicitacaoAtualizadaStepHandler();
+    }
+
+    @Bean
+    public ConversationStep clientConfirmationStepHandler(SolicitacaoAceitaEventPublisherPort solicitacaoAceitaEventPublisherPort, UpdateChatUseCase updateChatUseCase) {
+        return new ClientConfirmationStepHandler(solicitacaoAceitaEventPublisherPort, updateChatUseCase);
+    }
+
+    @Bean
+    public ConversationStep responseForSolicitationAcceptStepHandler() {
+        return new ResponseForSolicitationAcceptStepHandler();
     }
 }

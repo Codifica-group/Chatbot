@@ -1,10 +1,9 @@
 package com.codifica.chatbot.infrastructure.useCaseConfig;
 
+import com.codifica.chatbot.core.application.ports.in.SolicitacaoAceitaResponseEventListenerPort;
 import com.codifica.chatbot.core.application.ports.in.SolicitacaoAtualizadaEventListenerPort;
-import com.codifica.chatbot.core.application.usecase.ClienteParaCadastrarResponseUseCase;
-import com.codifica.chatbot.core.application.usecase.PetParaCadastrarResponseUseCase;
-import com.codifica.chatbot.core.application.usecase.SolicitacaoAtualizadaUseCase;
-import com.codifica.chatbot.core.application.usecase.SolicitacaoParaCadastrarResponseUseCase;
+import com.codifica.chatbot.core.application.usecase.*;
+import com.codifica.chatbot.core.application.usecase.chat.FindChatByIdUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
@@ -34,5 +33,10 @@ public class EventUseCaseConfig {
     @Bean
     public SolicitacaoAtualizadaEventListenerPort solicitacaoAtualizadaUseCase(UpdateChatUseCase updateChatUseCase, ObjectMapper objectMapper) {
         return new SolicitacaoAtualizadaUseCase(updateChatUseCase, objectMapper);
+    }
+
+    @Bean
+    public SolicitacaoAceitaResponseEventListenerPort solicitacaoAceitaResponseUseCase(FindChatByIdUseCase findChatByIdUseCase, UpdateChatUseCase updateChatUseCase) {
+        return new SolicitacaoAceitaResponseUseCase(findChatByIdUseCase, updateChatUseCase);
     }
 }
