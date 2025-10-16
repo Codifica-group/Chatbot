@@ -19,7 +19,7 @@ public class AskForAdressComplementStepHandler implements ConversationStep {
 
     @Override
     public StepResponse process(Chat chat, String userMessage) {
-        String validationError = ValidationUtil.validate(userMessage);
+        String validationError = ValidationUtil.validate(userMessage, 10);
         if (validationError != null) {
             return new StepResponse(validationError, getStepName());
         }
