@@ -33,7 +33,7 @@ public class WaitingForClienteEventStepHandler implements ConversationStep {
 
         try {
             Map<String, String> dadosContexto = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
-            dadosContexto.put("complemento", "não".equalsIgnoreCase(userMessage) ? "" : userMessage);
+            dadosContexto.put("complemento", "não".equalsIgnoreCase(userMessage) || "nao".equalsIgnoreCase(userMessage) ? "" : userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 
             publishClienteEvent(chat.getId(), dadosContexto);

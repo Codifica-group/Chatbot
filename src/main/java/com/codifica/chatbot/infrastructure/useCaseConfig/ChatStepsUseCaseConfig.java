@@ -100,4 +100,9 @@ public class ChatStepsUseCaseConfig {
     public ConversationStep responseForSolicitationAcceptStepHandler() {
         return new ResponseForSolicitationAcceptStepHandler();
     }
+
+    @Bean
+    public ConversationStep askForBreedSuggestionStepHandler(PetEventPublisherPort petEventPublisherPort) {
+        return new AskForBreedSuggestionStepHandler(petEventPublisherPort);
+    }
 }

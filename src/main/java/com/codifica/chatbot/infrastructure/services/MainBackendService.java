@@ -60,6 +60,21 @@ public class MainBackendService {
         return response.getBody();
     }
 
+    public List<Raca> findRacasByNomeSemelhante(String nome) {
+        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .pathSegment("racas", "nome", "aproximado", nome)
+                .build()
+                .toUriString();
+
+        ResponseEntity<List<Raca>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                createHeaders(),
+                new ParameterizedTypeReference<List<Raca>>() {}
+        );
+        return response.getBody();
+    }
+
     public List<Dia> getAvailableDays(LocalDate startDate, LocalDate endDate) {
         String url = UriComponentsBuilder.fromHttpUrl(apiUrl + "agendas/disponibilidade/dias")
                 .queryParam("inicio", startDate.toString())
