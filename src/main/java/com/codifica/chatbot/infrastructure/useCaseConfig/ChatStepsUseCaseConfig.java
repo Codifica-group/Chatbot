@@ -57,8 +57,8 @@ public class ChatStepsUseCaseConfig {
     }
 
     @Bean
-    public ConversationStep waitingForPetEventStepHandler(PetEventPublisherPort publisher) {
-        return new WaitingForPetEventStepHandler(publisher);
+    public ConversationStep waitingForPetEventStepHandler(PetEventPublisherPort publisher, MainBackendService mainBackendService) {
+        return new WaitingForPetEventStepHandler(publisher, mainBackendService);
     }
 
     @Bean

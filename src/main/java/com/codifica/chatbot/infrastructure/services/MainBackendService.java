@@ -1,6 +1,7 @@
 package com.codifica.chatbot.infrastructure.services;
 
 import com.codifica.chatbot.core.domain.pet.Pet;
+import com.codifica.chatbot.core.domain.raca.Raca;
 import com.codifica.chatbot.core.domain.servico.Servico;
 import com.codifica.chatbot.core.domain.shared.Dia;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,21 @@ public class MainBackendService {
                 HttpMethod.GET,
                 createHeaders(),
                 new ParameterizedTypeReference<List<Pet>>() {}
+        );
+        return response.getBody();
+    }
+
+    public Raca findRacaByNome(String nome) {
+        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .pathSegment("racas", "nome", nome)
+                .build()
+                .toUriString();
+
+        ResponseEntity<Raca> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                createHeaders(),
+                Raca.class
         );
         return response.getBody();
     }

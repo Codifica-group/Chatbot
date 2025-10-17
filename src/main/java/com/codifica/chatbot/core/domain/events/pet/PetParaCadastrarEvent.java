@@ -1,5 +1,6 @@
 package com.codifica.chatbot.core.domain.events.pet;
 
+import com.codifica.chatbot.core.domain.raca.Raca;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,14 +11,14 @@ public class PetParaCadastrarEvent implements Serializable {
     private final Integer chatId;
     private final Integer clienteId;
     private final String nome;
-    private final String raca;
+    private final Raca raca;
 
     @JsonCreator
     public PetParaCadastrarEvent(
             @JsonProperty("chatId") Integer chatId,
             @JsonProperty("clienteId") Integer clienteId,
             @JsonProperty("nome") String nome,
-            @JsonProperty("raca") String raca) {
+            @JsonProperty("raca") Raca raca) {
         this.chatId = chatId;
         this.clienteId = clienteId;
         this.nome = nome;
@@ -36,7 +37,7 @@ public class PetParaCadastrarEvent implements Serializable {
         return nome;
     }
 
-    public String getRaca() {
+    public Raca getRaca() {
         return raca;
     }
 }
