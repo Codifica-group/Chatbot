@@ -1,5 +1,6 @@
 package com.codifica.chatbot.core.application.chat_steps.solicitacao_event;
 
+import com.codifica.chatbot.core.application.util.ValidationUtil;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
@@ -35,6 +36,12 @@ public class ListAvailableTimesStepHandler implements ConversationStep {
         try {
             Map<String, Object> context = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
             List<Dia> availableDays = objectMapper.convertValue(context.get("availableDays"), new TypeReference<List<Dia>>() {});
+
+            String validationError = ValidationUtil.validateIntegerChoice(userMessage, availableDays.size() + 1);
+            if (validationError != null) {
+                return new StepResponse(validationError, getStepName());
+            }
+
             int choice = Integer.parseInt(userMessage) - 1;
 
             if (choice == availableDays.size()) {
@@ -53,10 +60,6 @@ public class ListAvailableTimesStepHandler implements ConversationStep {
                 return new StepResponse(response.toString(), "AGUARDANDO_ESCOLHA_DIA");
             }
 
-            if (choice < 0 || choice >= availableDays.size()) {
-                return new StepResponse("Opção inválida, por favor, tente novamente.", getStepName());
-            }
-
             Dia chosenDay = availableDays.get(choice);
             context.put("chosenDay", chosenDay);
 
@@ -69,7 +72,6 @@ public class ListAvailableTimesStepHandler implements ConversationStep {
                 response.append(String.format("%d - %s\n", i + 1, availableTimes.get(i)));
             }
             response.append(String.format("%d - Escolher outro dia", availableTimes.size() + 1));
-
 
             return new StepResponse(response.toString(), "AGUARDANDO_ESCOLHA_HORARIO");
 

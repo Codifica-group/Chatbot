@@ -1,6 +1,7 @@
 package com.codifica.chatbot.core.application.chat_steps.solicitacao_event;
 
 import com.codifica.chatbot.core.application.ports.out.SolicitacaoEventPublisherPort;
+import com.codifica.chatbot.core.application.util.ValidationUtil;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
@@ -40,6 +41,11 @@ public class PublishSolicitationStepHandler implements ConversationStep {
         try {
             Map<String, Object> context = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
             List<Servico> servicosList = objectMapper.convertValue(context.get("servicosList"), new TypeReference<List<Servico>>() {});
+
+            String validationError = ValidationUtil.validateServiceChoice(userMessage, servicosList.size());
+            if (validationError != null) {
+                return new StepResponse(validationError, getStepName());
+            }
 
             List<Integer> servicosIds = Arrays.stream(userMessage.split(","))
                     .map(s -> Integer.parseInt(s.trim()) - 1)

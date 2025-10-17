@@ -1,6 +1,8 @@
 package com.codifica.chatbot.core.application.util;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,6 +61,45 @@ public class ValidationUtil {
         if (!CEP_PATTERN.matcher(cep).matches()) {
             return "O CEP parece inválido. Por favor, digite apenas os 8 números do seu CEP.";
         }
+        return null;
+    }
+
+    public static String validateIntegerChoice(String input, int maxChoice) {
+        if (input == null || input.trim().isEmpty()) {
+            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+        }
+
+        try {
+            int choice = Integer.parseInt(input.trim());
+            if (choice < 1 || choice > maxChoice) {
+                return "Essa não é uma opção válida. Por favor, escolha um dos números da lista.";
+            }
+        } catch (NumberFormatException e) {
+            return "Por favor, digite apenas o número correspondente à opção desejada.";
+        }
+
+        return null;
+    }
+
+    public static String validateServiceChoice(String input, int maxChoice) {
+        if (input == null || input.trim().isEmpty()) {
+            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+        }
+
+        try {
+            List<Integer> choices = Arrays.stream(input.split(","))
+                    .map(s -> Integer.parseInt(s.trim()))
+                    .collect(Collectors.toList());
+
+            for (Integer choice : choices) {
+                if (choice < 1 || choice > maxChoice) {
+                    return "Opa! Um dos números que você digitou (" + choice + ") não é uma opção válida. Por favor, tente novamente com os números da lista.";
+                }
+            }
+        } catch (NumberFormatException e) {
+            return "Por favor, digite apenas os números dos serviços, separados por vírgula.";
+        }
+
         return null;
     }
 }

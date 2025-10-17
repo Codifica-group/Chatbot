@@ -1,5 +1,6 @@
 package com.codifica.chatbot.core.application.chat_steps.solicitacao_event;
 
+import com.codifica.chatbot.core.application.util.ValidationUtil;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
@@ -36,15 +37,17 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
         try {
             Map<String, Object> context = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
             List<Pet> pets = objectMapper.convertValue(context.get("pets"), new TypeReference<List<Pet>>() {});
+
+            String validationError = ValidationUtil.validateIntegerChoice(userMessage, pets.size() + 1);
+            if (validationError != null) {
+                return new StepResponse(validationError, getStepName());
+            }
+
             int choice = Integer.parseInt(userMessage) - 1;
 
             if (choice == pets.size()) {
                 chat.setDadosContexto("{}");
                 return new StepResponse("Ok, vamos cadastrar um novo pet. Qual o nome dele?", "AGUARDANDO_NOME_PET");
-            }
-
-            if (choice < 0 || choice >= pets.size()) {
-                return new StepResponse("Opção inválida, por favor, tente novamente.", getStepName());
             }
 
             context.put("petId", pets.get(choice).getId());
@@ -65,7 +68,7 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
             return new StepResponse(response.toString(), "AGUARDANDO_ESCOLHA_DIA");
 
         } catch (Exception e) {
-             logger.error("FALHA: Erro ao processar escolha do pet:", e);
+            logger.error("FALHA: Erro ao processar escolha do pet:", e);
             return new StepResponse("Ocorreu um erro ao processar sua escolha. Tente novamente.", getStepName());
         }
     }

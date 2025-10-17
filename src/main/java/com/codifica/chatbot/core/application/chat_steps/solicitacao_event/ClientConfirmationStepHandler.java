@@ -2,15 +2,18 @@ package com.codifica.chatbot.core.application.chat_steps.solicitacao_event;
 
 import com.codifica.chatbot.core.application.ports.out.SolicitacaoAceitaEventPublisherPort;
 import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
+import com.codifica.chatbot.core.application.util.ValidationUtil;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoAceitaEvent;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoAtualizadaEvent;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 
 public class ClientConfirmationStepHandler implements ConversationStep {
@@ -31,7 +34,13 @@ public class ClientConfirmationStepHandler implements ConversationStep {
 
     @Override
     public StepResponse process(Chat chat, String userMessage) {
+        String validationError = ValidationUtil.validateIntegerChoice(userMessage, 2);
+        if (validationError != null) {
+            return new StepResponse(validationError, getStepName());
+        }
+
         try {
+            Map<String, Object> dadosContexto = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
             SolicitacaoAtualizadaEvent event = objectMapper.readValue(chat.getDadosContexto(), SolicitacaoAtualizadaEvent.class);
             boolean aceito = "1".equals(userMessage.trim());
 
@@ -39,12 +48,19 @@ public class ClientConfirmationStepHandler implements ConversationStep {
                     new SolicitacaoAceitaEvent(chat.getId(), event.getSolicitacao().getId(), LocalDateTime.now(), aceito)
             );
 
-            String dadosContexto = "{\"aceito\": " + aceito + "}";
-            chat.setDadosContexto(dadosContexto);
+            dadosContexto.put("aceito", aceito);
+            chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
             chat.setDataAtualizacao(LocalDateTime.now());
             updateChatUseCase.updateChatStatus(chat);
 
-            return new StepResponse("Processando sua confirmação...", "AGUARDANDO_RESPOSTA_SOLICITACAO_ACEITA");
+            String responseMessage;
+            if (aceito) {
+                responseMessage = "Ótimo estou confirmando seu agendamento. Só um momento, por favor.";
+            } else {
+                responseMessage = "Entendido estou cancelando sua solicitação. Só um momento, por favor.";
+            }
+
+            return new StepResponse(responseMessage, "AGUARDANDO_RESPOSTA_SOLICITACAO_ACEITA");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar sua confirmação. Tente novamente.", getStepName());
         }

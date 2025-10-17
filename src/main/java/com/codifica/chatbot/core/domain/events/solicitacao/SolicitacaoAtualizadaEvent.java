@@ -22,6 +22,10 @@ public class SolicitacaoAtualizadaEvent implements Serializable {
         return aceito;
     }
 
+    public void setAceito(Boolean aceito) {
+        this.aceito = aceito;
+    }
+
     public Boolean getDataInicioAlterada() {
         return dataInicioAlterada;
     }
