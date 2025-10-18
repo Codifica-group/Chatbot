@@ -39,7 +39,6 @@ public class TerminalAdapter implements CommandLineRunner {
     private static final Set<String> WAITING_STEPS = Set.of(
             "AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE",
             "AGUARDANDO_RESPOSTA_CADASTRO_PET",
-            "AGUARDANDO_CONFIRMACAO_AGENDAMENTO",
             "AGUARDANDO_ORÇAMENTO",
             "AGUARDANDO_RESPOSTA_SOLICITACAO_ACEITA"
     );
@@ -82,11 +81,6 @@ public class TerminalAdapter implements CommandLineRunner {
 
             if (WAITING_STEPS.contains(currentChat.getPassoAtual())) {
                 currentChat = handleWaitingStep(currentChat);
-                continue;
-            }
-
-            if ("FIM".equals(currentChat.getPassoAtual())) {
-                currentChat = null;
                 continue;
             }
 

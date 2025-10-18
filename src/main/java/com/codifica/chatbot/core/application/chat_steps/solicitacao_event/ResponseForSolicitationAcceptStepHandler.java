@@ -38,9 +38,9 @@ public class ResponseForSolicitationAcceptStepHandler implements ConversationSte
             } else {
                 responseMessage = "Agendamento cancelado. Se mudar de ideia, é só chamar!";
             }
-            return new StepResponse(responseMessage, "FIM");
+            return new StepResponse(responseMessage, "IDLE");
         } catch (Exception e) {
-            return new StepResponse("Ocorreu um erro ao exibir a mensagem final." + e, "FIM");
+            return new StepResponse("Ocorreu um erro ao exibir a mensagem final." + e, "IDLE");
         }
     }
 }

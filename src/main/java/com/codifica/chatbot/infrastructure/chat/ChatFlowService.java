@@ -19,6 +19,7 @@ public class ChatFlowService {
     }
 
     public String processMessage(Chat chat, String userMessage) {
+        String currentStepName = chat.getPassoAtual();
         var handler = stepHandlerFactory.getHandler(chat.getPassoAtual())
                 .orElseThrow(() -> new IllegalStateException("Nenhum handler encontrado para o passo: " + chat.getPassoAtual()));
 
@@ -26,8 +27,19 @@ public class ChatFlowService {
 
         chat.setPassoAtual(stepResponse.nextStep());
         chat.setDataAtualizacao(LocalDateTime.now());
+        String finalResponseMessage = stepResponse.responseMessage();
+
+        if ("IDLE".equals(currentStepName)) {
+            var nextHandler = stepHandlerFactory.getHandler(chat.getPassoAtual())
+                    .orElseThrow(() -> new IllegalStateException("Nenhum handler encontrado para o passo seguinte ao IDLE: " + chat.getPassoAtual()));
+
+            StepResponse nextStepResponse = nextHandler.process(chat, "");
+            chat.setPassoAtual(nextStepResponse.nextStep());
+            finalResponseMessage += "\n" + nextStepResponse.responseMessage();
+        }
+
         updateChatUseCase.execute(chat.getId(), chat);
 
-        return stepResponse.responseMessage();
+        return finalResponseMessage;
     }
 }

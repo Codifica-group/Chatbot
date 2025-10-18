@@ -47,7 +47,7 @@ public class SolicitacaoAtualizadaStepHandler implements ConversationStep {
                 mensagem += "2. Recusar";
                 return new StepResponse(mensagem, "AGUARDANDO_CONFIRMACAO_CLIENTE");
             } else {
-                return new StepResponse("Infelizmente, o petshop não pôde aceitar sua solicitação de agendamento no momento.", "FIM");
+                return new StepResponse("Infelizmente, o petshop não pôde aceitar sua solicitação de agendamento no momento.", "IDLE");
             }
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar a resposta do petshop. Tente novamente.", getStepName());

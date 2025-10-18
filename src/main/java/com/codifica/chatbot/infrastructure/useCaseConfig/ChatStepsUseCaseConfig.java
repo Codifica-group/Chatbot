@@ -1,5 +1,6 @@
 package com.codifica.chatbot.infrastructure.useCaseConfig;
 
+import com.codifica.chatbot.core.application.chat_steps.IdleStepHandler;
 import com.codifica.chatbot.core.application.chat_steps.cliente_event.*;
 import com.codifica.chatbot.core.application.chat_steps.pet_event.*;
 import com.codifica.chatbot.core.application.chat_steps.solicitacao_event.*;
@@ -104,5 +105,10 @@ public class ChatStepsUseCaseConfig {
     @Bean
     public ConversationStep askForBreedSuggestionStepHandler(PetEventPublisherPort petEventPublisherPort) {
         return new AskForBreedSuggestionStepHandler(petEventPublisherPort);
+    }
+
+    @Bean
+    public ConversationStep idleStepHandler() {
+        return new IdleStepHandler();
     }
 }
