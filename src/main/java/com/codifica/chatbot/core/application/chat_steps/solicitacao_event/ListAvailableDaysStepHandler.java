@@ -1,11 +1,13 @@
 package com.codifica.chatbot.core.application.chat_steps.solicitacao_event;
 
 import com.codifica.chatbot.core.application.util.ValidationUtil;
+import com.codifica.chatbot.core.domain.agenda.Agenda;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
 import com.codifica.chatbot.core.domain.pet.Pet;
 import com.codifica.chatbot.core.domain.shared.Dia;
+import com.codifica.chatbot.core.domain.shared.DiaDaSemana;
 import com.codifica.chatbot.infrastructure.services.MainBackendService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,14 +16,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ListAvailableDaysStepHandler implements ConversationStep {
 
     private static final Logger logger = LoggerFactory.getLogger(ListAvailableDaysStepHandler.class);
     private final MainBackendService mainBackendService;
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
 
     public ListAvailableDaysStepHandler(MainBackendService mainBackendService) {
         this.mainBackendService = mainBackendService;
@@ -50,7 +55,23 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
                 return new StepResponse("Ok, vamos cadastrar um novo pet. Qual o nome dele?", "AGUARDANDO_NOME_PET");
             }
 
-            context.put("petId", pets.get(choice).getId());
+            Pet chosenPet = pets.get(choice);
+
+            Optional<Agenda> futureAgendaOpt = mainBackendService.getFutureAgendaByPetId(chosenPet.getId());
+            if (futureAgendaOpt.isPresent()) {
+                Agenda nextAgenda = futureAgendaOpt.get();
+                String diaDaSemana = DiaDaSemana.fromDate(nextAgenda.getDataHoraInicio().toLocalDate());
+                String dataFormatada = diaDaSemana + ", " + nextAgenda.getDataHoraInicio().format(formatter);
+                String errorMessage = String.format(
+                        "Desculpe, %s já possui um agendamento futuro para %s. Não é possível criar um novo agendamento no momento.",
+                        chosenPet.getNome(),
+                        dataFormatada
+                );
+                chat.setDadosContexto("{}");
+                return new StepResponse(errorMessage, "IDLE");
+            }
+
+            context.put("petId", chosenPet.getId());
             context.remove("pets");
 
             LocalDate startDate = LocalDate.now();

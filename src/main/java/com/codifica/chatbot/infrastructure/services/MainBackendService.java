@@ -1,21 +1,22 @@
 package com.codifica.chatbot.infrastructure.services;
 
+import com.codifica.chatbot.core.domain.agenda.Agenda;
 import com.codifica.chatbot.core.domain.pet.Pet;
 import com.codifica.chatbot.core.domain.raca.Raca;
 import com.codifica.chatbot.core.domain.servico.Servico;
 import com.codifica.chatbot.core.domain.shared.Dia;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MainBackendService {
@@ -73,6 +74,25 @@ public class MainBackendService {
                 new ParameterizedTypeReference<List<Raca>>() {}
         );
         return response.getBody();
+    }
+
+    public Optional<Agenda> getFutureAgendaByPetId(Integer petId) {
+        String url = apiUrl + "agendas/futuro/pet/" + petId;
+        try {
+            ResponseEntity<Agenda> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    createHeaders(),
+                    Agenda.class
+            );
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return Optional.of(response.getBody());
+            } else {
+                return Optional.empty();
+            }
+        } catch (RestClientException e) {
+            return Optional.empty();
+        }
     }
 
     public List<Dia> getAvailableDays(LocalDate startDate, LocalDate endDate) {
