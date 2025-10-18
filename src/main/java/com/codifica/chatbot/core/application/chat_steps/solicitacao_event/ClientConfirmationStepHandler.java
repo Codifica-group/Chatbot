@@ -29,7 +29,7 @@ public class ClientConfirmationStepHandler implements ConversationStep {
 
     @Override
     public String getStepName() {
-        return "AGUARDANDO_CONFIRMACAO_CLIENTE";
+        return "AGUARDANDO_RESPOSTA_SOLICITACAO_CLIENTE";
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ClientConfirmationStepHandler implements ConversationStep {
                 responseMessage = "Entendido estou cancelando sua solicitação. Só um momento, por favor.";
             }
 
-            return new StepResponse(responseMessage, "AGUARDANDO_RESPOSTA_SOLICITACAO_ACEITA");
+            return new StepResponse(responseMessage, "AGUARDANDO_RESPOSTA_SOLICITACAO_API");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar sua confirmação. Tente novamente.", getStepName());
         }

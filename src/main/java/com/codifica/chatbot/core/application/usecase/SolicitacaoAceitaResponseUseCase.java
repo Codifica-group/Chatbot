@@ -29,7 +29,7 @@ public class SolicitacaoAceitaResponseUseCase implements SolicitacaoAceitaRespon
 
         if (event.getStatus() == StatusEvent.SUCESSO) {
             logger.info("SUCESSO: Resposta de solicitação aceita para o chatId {}", event.getChatId());
-            chat.setPassoAtual("AGENDAMENTO_FINALIZADO");
+            chat.setPassoAtual("SOLICITACAO_FINALIZADA");
         } else {
             logger.error("FALHA: Erro ao processar resposta de solicitação aceita para o chatId {}: {}", event.getChatId(), event.getErro());
             chat.setDadosContexto("{\"erro\": \"" + event.getErro() + "\"}");

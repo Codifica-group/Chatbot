@@ -18,7 +18,7 @@ public class ResponseForSolicitationAcceptStepHandler implements ConversationSte
 
     @Override
     public String getStepName() {
-        return "AGENDAMENTO_FINALIZADO";
+        return "SOLICITACAO_FINALIZADA";
     }
 
     @Override
@@ -38,6 +38,7 @@ public class ResponseForSolicitationAcceptStepHandler implements ConversationSte
             } else {
                 responseMessage = "Agendamento cancelado. Se mudar de ideia, é só chamar!";
             }
+            chat.setDadosContexto("{}");
             return new StepResponse(responseMessage, "IDLE");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao exibir a mensagem final." + e, "IDLE");

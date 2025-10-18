@@ -23,7 +23,7 @@ public class SolicitacaoParaCadastrarResponseUseCase implements SolicitacaoEvent
     public void processSolicitacaoParaCadastrarResponse(SolicitacaoParaCadastrarResponseEvent event) {
         if (event.getStatus() == StatusEvent.SUCESSO) {
             logger.info("SUCESSO: Solicitacao do chatId {} cadastrada com Id: {}", event.getChatId(), event.getSolicitacaoId());
-            String passoAtual = "AGUARDANDO_ORÇAMENTO";
+            String passoAtual = "AGUARDANDO_RESPOSTA_SOLICITACAO_PETSHOP";
             String dadosContexto = "{\"solicitacao\": \"" + event.getSolicitacaoId() + "\"}";
             Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
             updateChatUseCase.updateChatStatus(chat);

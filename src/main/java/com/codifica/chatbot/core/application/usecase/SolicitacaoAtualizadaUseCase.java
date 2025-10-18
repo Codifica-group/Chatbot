@@ -26,17 +26,19 @@ public class SolicitacaoAtualizadaUseCase implements SolicitacaoAtualizadaEventL
 
     @Override
     public void processSolicitacaoAtualizada(SolicitacaoAtualizadaEvent event) {
-        if (event.getAceito()) {
-            try {
-                String dadosContexto = objectMapper.writeValueAsString(event);
-                Chat chat = new Chat(event.getSolicitacao().getChatId(), "ACEITO_PELO_USUARIO", dadosContexto, LocalDateTime.now(), null);
-                updateChatUseCase.updateChatStatus(chat);
+        try {
+            String dadosContexto = objectMapper.writeValueAsString(event);
+            Chat chat = new Chat(event.getSolicitacao().getChatId(), "SOLICITACAO_RESPONDIDA_PETSHOP", dadosContexto, LocalDateTime.now(), null);
+            updateChatUseCase.updateChatStatus(chat);
+
+            if  (event.getAceito()) {
                 logger.info("ATUALIZAÇÃO: Solicitação {} do Chat {} aceita pelo usuário.", event.getSolicitacao().getId(), event.getSolicitacao().getChatId());
-            } catch (JsonProcessingException e) {
-                logger.error("Erro ao serializar SolicitacaoAtualizadaEvent para o chat {}", event.getSolicitacao().getChatId(), e);
             }
-        } else {
-            logger.info("ATUALIZAÇÃO: Solicitação {} do Chat {} recusada pelo usuário.", event.getSolicitacao().getId(), event.getSolicitacao().getChatId());
+            else {
+                logger.info("ATUALIZAÇÃO: Solicitação {} do Chat {} recusada pelo usuário.", event.getSolicitacao().getId(), event.getSolicitacao().getChatId());
+            }
+        } catch (JsonProcessingException e) {
+            logger.error("Erro ao serializar SolicitacaoAtualizadaEvent para o chat {}", event.getSolicitacao().getChatId(), e);
         }
     }
 }

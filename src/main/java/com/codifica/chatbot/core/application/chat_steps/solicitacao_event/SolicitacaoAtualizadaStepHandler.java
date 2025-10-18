@@ -16,7 +16,7 @@ public class SolicitacaoAtualizadaStepHandler implements ConversationStep {
 
     @Override
     public String getStepName() {
-        return "ACEITO_PELO_USUARIO";
+        return "SOLICITACAO_RESPONDIDA_PETSHOP";
     }
 
     @Override
@@ -45,8 +45,9 @@ public class SolicitacaoAtualizadaStepHandler implements ConversationStep {
                 mensagem += "Por favor, confirme o agendamento:\n";
                 mensagem += "1. Confirmar\n";
                 mensagem += "2. Recusar";
-                return new StepResponse(mensagem, "AGUARDANDO_CONFIRMACAO_CLIENTE");
+                return new StepResponse(mensagem, "AGUARDANDO_RESPOSTA_SOLICITACAO_CLIENTE");
             } else {
+                chat.setDadosContexto("{}");
                 return new StepResponse("Infelizmente, o petshop não pôde aceitar sua solicitação de agendamento no momento.", "IDLE");
             }
         } catch (Exception e) {

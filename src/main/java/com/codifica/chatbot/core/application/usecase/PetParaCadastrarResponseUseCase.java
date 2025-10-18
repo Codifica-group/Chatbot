@@ -24,7 +24,7 @@ public class PetParaCadastrarResponseUseCase implements PetEventListenerPort {
         if (event.getStatus() == StatusEvent.SUCESSO) {
             logger.info("SUCESSO: Pet do chatId {} cadastrado com Id: {}", event.getChatId(), event.getPetId());
             String passoAtual = "AGUARDANDO_AGENDAMENTO";
-            String dadosContexto = "{\"pet\": \"" + event.getPetId() + "\"}";
+            String dadosContexto = "{}";
             Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
             updateChatUseCase.updateChatStatus(chat);
             logger.info("ATUALIZAÇÃO: Chat {}, Cliente {}, Pet {}, Passo atual {}.", event.getChatId(), event.getClienteId(), event.getPetId(), passoAtual);

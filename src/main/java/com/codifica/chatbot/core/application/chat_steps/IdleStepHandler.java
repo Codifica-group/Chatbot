@@ -12,6 +12,8 @@ public class IdleStepHandler implements ConversationStep {
 
     @Override
     public StepResponse process(Chat chat, String userMessage) {
+        chat.setDadosContexto("{}");
+
         String nome = chat.getCliente() != null ? chat.getCliente().getNome() : "";
         String responseMessage = "Olá " + nome;
         return new StepResponse(responseMessage, "AGUARDANDO_AGENDAMENTO");

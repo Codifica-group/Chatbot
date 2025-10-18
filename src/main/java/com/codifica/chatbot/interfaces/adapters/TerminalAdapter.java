@@ -39,8 +39,8 @@ public class TerminalAdapter implements CommandLineRunner {
     private static final Set<String> WAITING_STEPS = Set.of(
             "AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE",
             "AGUARDANDO_RESPOSTA_CADASTRO_PET",
-            "AGUARDANDO_ORÇAMENTO",
-            "AGUARDANDO_RESPOSTA_SOLICITACAO_ACEITA"
+            "AGUARDANDO_RESPOSTA_SOLICITACAO_PETSHOP",
+            "AGUARDANDO_RESPOSTA_SOLICITACAO_API"
     );
 
     @Override
