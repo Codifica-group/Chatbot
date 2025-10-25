@@ -1,6 +1,7 @@
 package com.codifica.chatbot.infrastructure.useCaseConfig;
 
 import com.codifica.chatbot.core.application.chat_steps.IdleStepHandler;
+import com.codifica.chatbot.core.application.chat_steps.UniversalErrorStepHandler;
 import com.codifica.chatbot.core.application.chat_steps.cliente_event.*;
 import com.codifica.chatbot.core.application.chat_steps.pet_event.*;
 import com.codifica.chatbot.core.application.chat_steps.solicitacao_event.*;
@@ -110,5 +111,10 @@ public class ChatStepsUseCaseConfig {
     @Bean
     public ConversationStep idleStepHandler() {
         return new IdleStepHandler();
+    }
+
+    @Bean
+    public ConversationStep universalErrorStepHandler() {
+        return new UniversalErrorStepHandler();
     }
 }

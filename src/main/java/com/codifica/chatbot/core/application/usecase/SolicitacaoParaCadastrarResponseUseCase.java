@@ -30,7 +30,8 @@ public class SolicitacaoParaCadastrarResponseUseCase implements SolicitacaoEvent
             logger.info("ATUALIZAÇÃO: Chat {}, Solicitacao {}, Passo atual {}.", event.getChatId(), event.getSolicitacaoId(), passoAtual);
         } else {
             logger.error("FALHA: Erro ao cadastrar solicitacao do chatId {}: {}", event.getChatId(), event.getErro());
-            String passoAtual = "ERRO_CADASTRO_SOLICITACAO";
+//            String passoAtual = "ERRO_CADASTRO_SOLICITACAO";
+            String passoAtual = "ERRO";
             String dadosContexto = "{\"erro\": \"" + event.getErro() + "\"}";
             Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
             updateChatUseCase.updateChatStatus(chat);

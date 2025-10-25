@@ -30,7 +30,8 @@ public class PetParaCadastrarResponseUseCase implements PetEventListenerPort {
             logger.info("ATUALIZAÇÃO: Chat {}, Cliente {}, Pet {}, Passo atual {}.", event.getChatId(), event.getClienteId(), event.getPetId(), passoAtual);
         } else {
             logger.error("FALHA: Erro ao cadastrar pet do chatId {}: {}", event.getChatId(), event.getErro());
-            String passoAtual = "ERRO_CADASTRO_PET";
+//            String passoAtual = "ERRO_CADASTRO_PET";
+            String passoAtual = "ERRO";
             String dadosContexto = "{\"erro\": \"" + event.getErro() + "\"}";
             Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
             updateChatUseCase.updateChatStatus(chat);

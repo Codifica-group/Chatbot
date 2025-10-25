@@ -33,7 +33,8 @@ public class ClienteParaCadastrarResponseUseCase implements ClienteEventListener
             logger.info("ATUALIZAÇÃO: Chat {}, Cliente {}, Passo atual {}.", chat.getId(), chat.getCliente().getId(), chat.getPassoAtual());
         } else {
             logger.error("FALHA: Erro ao cadastrar cliente do chatId {}: {}", event.getChatId(), event.getErro());
-            String passoAtual = "ERRO_CADASTRO_CLIENTE";
+//            String passoAtual = "ERRO_CADASTRO_CLIENTE";
+            String passoAtual = "ERRO";
             String dadosContexto = "{\"erro\": \"" + event.getErro() + "\"}";
             Chat chat = new Chat(event.getChatId(), passoAtual, dadosContexto, LocalDateTime.now(), null);
             updateChatUseCase.updateChatStatus(chat);
