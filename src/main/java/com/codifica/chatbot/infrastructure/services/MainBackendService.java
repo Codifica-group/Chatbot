@@ -1,6 +1,7 @@
 package com.codifica.chatbot.infrastructure.services;
 
 import com.codifica.chatbot.core.domain.agenda.Agenda;
+import com.codifica.chatbot.core.domain.disponibilidade.Disponibilidade;
 import com.codifica.chatbot.core.domain.pet.Pet;
 import com.codifica.chatbot.core.domain.raca.Raca;
 import com.codifica.chatbot.core.domain.servico.Servico;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,28 +97,17 @@ public class MainBackendService {
         }
     }
 
-    public List<Dia> getAvailableDays(LocalDate startDate, LocalDate endDate) {
-        String url = UriComponentsBuilder.fromHttpUrl(apiUrl + "agendas/disponibilidade/dias")
+    public List<Disponibilidade> getDisponibilidade(LocalDateTime startDate, LocalDateTime endDate) {
+        String url = UriComponentsBuilder.fromHttpUrl(apiUrl + "agendas/disponibilidade")
                 .queryParam("inicio", startDate.toString())
                 .queryParam("fim", endDate.toString())
                 .toUriString();
 
-        ResponseEntity<List<Dia>> response = restTemplate.exchange(
+        ResponseEntity<List<Disponibilidade>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 createHeaders(),
-                new ParameterizedTypeReference<List<Dia>>() {}
-        );
-        return response.getBody();
-    }
-
-    public List<String> getAvailableTimes(LocalDate day) {
-        String url = apiUrl + "agendas/disponibilidade/horarios?dia=" + day;
-        ResponseEntity<List<String>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                createHeaders(),
-                new ParameterizedTypeReference<List<String>>() {}
+                new ParameterizedTypeReference<List<Disponibilidade>>() {}
         );
         return response.getBody();
     }

@@ -5,8 +5,8 @@ import com.codifica.chatbot.core.domain.agenda.Agenda;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.chat.ConversationStep;
 import com.codifica.chatbot.core.domain.chat.StepResponse;
+import com.codifica.chatbot.core.domain.disponibilidade.Disponibilidade;
 import com.codifica.chatbot.core.domain.pet.Pet;
-import com.codifica.chatbot.core.domain.shared.Dia;
 import com.codifica.chatbot.core.domain.shared.DiaDaSemana;
 import com.codifica.chatbot.infrastructure.services.MainBackendService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -74,17 +74,25 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
             context.put("petId", chosenPet.getId());
             context.remove("pets");
 
-            LocalDate startDate = LocalDate.now();
-            List<Dia> availableDays = mainBackendService.getAvailableDays(startDate, startDate.plusDays(14));
-            context.put("availableDays", availableDays);
-            context.put("lastDate", startDate.plusDays(14).toString());
+            LocalDateTime startDate = LocalDateTime.now();
+            List<Disponibilidade> disponibilidade = mainBackendService.getDisponibilidade(startDate, startDate.plusDays(14));
+            context.put("disponibilidade", disponibilidade);
+            context.put("ultimoDia", startDate.plusDays(14).toString());
             chat.setDadosContexto(objectMapper.writeValueAsString(context));
 
-            StringBuilder response = new StringBuilder("Ótimo! Aqui estão os dias disponíveis para agendamento:\n");
-            for (int i = 0; i < availableDays.size(); i++) {
-                response.append(String.format("%d - %s - %s\n", i + 1, availableDays.get(i).getData(), availableDays.get(i).getDiaSemana()));
+            if (disponibilidade.isEmpty()) { // TODO: tratar caso nenhum dia disponivel em 14 dias
+                chat.setDadosContexto("{}");
+                return new StepResponse("Desculpe, não encontrei horários disponíveis nos próximos 14 dias. Por favor, tente novamente mais tarde.", "IDLE");
             }
-            response.append(String.format("%d - Ver mais datas", availableDays.size() + 1));
+
+            StringBuilder response = new StringBuilder("Ótimo! Aqui estão os próximos dias com horários disponíveis:\n");
+            for (int i = 0; i < disponibilidade.size(); i++) {
+                response.append(String.format("%d - %s - %s\n",
+                        i + 1,
+                        disponibilidade.get(i).getDia().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        disponibilidade.get(i).getDiaSemana()));
+            }
+            response.append(String.format("%d - Ver mais datas", disponibilidade.size() + 1));
 
             return new StepResponse(response.toString(), "AGUARDANDO_ESCOLHA_DIA");
 
