@@ -33,7 +33,7 @@ public class TerminalAdapter implements CommandLineRunner {
     @Autowired
     private ChatFlowService chatFlowService;
 
-    @Autowired
+    @Autowired(required = false)
     private DevDataInitializer devDataInitializer;
 
     private static final Set<String> WAITING_STEPS = Set.of(
@@ -45,7 +45,9 @@ public class TerminalAdapter implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        devDataInitializer.initDatabase();
+        if (devDataInitializer != null) {
+            devDataInitializer.initDatabase();
+        }
         Scanner scanner = new Scanner(System.in);
         System.out.println("--- Chatbot Terminal Iniciado (digite 'sair' para trocar de chat ou encerrar) ---");
 

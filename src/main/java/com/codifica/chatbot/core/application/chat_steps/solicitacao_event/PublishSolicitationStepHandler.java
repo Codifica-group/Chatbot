@@ -28,7 +28,6 @@ public class PublishSolicitationStepHandler implements ConversationStep {
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private static final Logger logger = LoggerFactory.getLogger(PublishSolicitationStepHandler.class);
 
-
     public PublishSolicitationStepHandler(SolicitacaoEventPublisherPort solicitacaoEventPublisherPort) {
         this.solicitacaoEventPublisherPort = solicitacaoEventPublisherPort;
     }
@@ -66,7 +65,7 @@ public class PublishSolicitationStepHandler implements ConversationStep {
                     servicosIds,
                     chosenDayObject.atTime(LocalTime.parse(chosenTimeString)),
                     null,
-                    "AGUARDANDO_RESPOSTA_SOLICITACAO_PETSHOP"
+                    "AGUARDANDO_RESPOSTA_PETSHOP"
             );
 
             solicitacaoEventPublisherPort.publishSolicitacaoParaCadastrar(event);

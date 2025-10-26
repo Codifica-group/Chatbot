@@ -8,10 +8,12 @@ import com.codifica.chatbot.infrastructure.persistence.chat.ChatJpaRepository;
 import com.codifica.chatbot.infrastructure.persistence.cliente.ClienteJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
 
 @Configuration
+@Profile("dev")
 public class DevDataInitializer {
 
     @Autowired
