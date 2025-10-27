@@ -10,10 +10,8 @@ import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoParaCadast
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/chatbot/api/events")
 public class EventController {
 
     private final ClienteEventPublisherPort clienteEventPublisherPort;

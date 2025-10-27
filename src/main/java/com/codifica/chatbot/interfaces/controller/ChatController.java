@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/chats")
+@RequestMapping("/chatbot/api/chats")
 public class ChatController {
 
     private final ListChatUseCase listChatUseCase;
