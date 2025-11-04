@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDateTime;
 
 @Configuration
-@Profile("dev")
+@Profile("db-dev")
 public class DevDataInitializer {
 
     @Autowired
