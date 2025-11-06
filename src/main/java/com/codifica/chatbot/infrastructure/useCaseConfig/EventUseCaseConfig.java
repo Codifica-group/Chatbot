@@ -5,23 +5,32 @@ import com.codifica.chatbot.core.application.ports.in.SolicitacaoAtualizadaEvent
 import com.codifica.chatbot.core.application.usecase.*;
 import com.codifica.chatbot.core.application.usecase.chat.FindChatByIdUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
+import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
+import com.codifica.chatbot.interfaces.adapters.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import java.util.Optional;
 
 @Configuration
 public class EventUseCaseConfig {
 
     @Bean
     public ClienteParaCadastrarResponseUseCase processClienteParaCadastrarResponseUseCase(
-            UpdateChatUseCase updateChatUseCase) {
-        return new ClienteParaCadastrarResponseUseCase(updateChatUseCase);
+            UpdateChatUseCase updateChatUseCase,
+            FindChatByIdUseCase findChatByIdUseCase,
+            ChatFlowService chatFlowService,
+            Optional<NotificationService> notificationService) {
+        return new ClienteParaCadastrarResponseUseCase(updateChatUseCase, findChatByIdUseCase, chatFlowService, notificationService);
     }
 
     @Bean
     public PetParaCadastrarResponseUseCase processPetParaCadastrarResponseUseCase(
-            UpdateChatUseCase updateChatUseCase) {
-        return new PetParaCadastrarResponseUseCase(updateChatUseCase);
+            UpdateChatUseCase updateChatUseCase,
+            FindChatByIdUseCase findChatByIdUseCase,
+            ChatFlowService chatFlowService,
+            Optional<NotificationService> notificationService) {
+        return new PetParaCadastrarResponseUseCase(updateChatUseCase, findChatByIdUseCase, chatFlowService, notificationService);
     }
 
     @Bean
@@ -31,12 +40,21 @@ public class EventUseCaseConfig {
     }
 
     @Bean
-    public SolicitacaoAtualizadaEventListenerPort solicitacaoAtualizadaUseCase(UpdateChatUseCase updateChatUseCase, ObjectMapper objectMapper) {
-        return new SolicitacaoAtualizadaUseCase(updateChatUseCase, objectMapper);
+    public SolicitacaoAtualizadaEventListenerPort solicitacaoAtualizadaUseCase(
+            UpdateChatUseCase updateChatUseCase,
+            ObjectMapper objectMapper,
+            FindChatByIdUseCase findChatByIdUseCase,
+            ChatFlowService chatFlowService,
+            Optional<NotificationService> notificationService) {
+        return new SolicitacaoAtualizadaUseCase(updateChatUseCase, objectMapper, findChatByIdUseCase, chatFlowService, notificationService);
     }
 
     @Bean
-    public SolicitacaoAceitaResponseEventListenerPort solicitacaoAceitaResponseUseCase(FindChatByIdUseCase findChatByIdUseCase, UpdateChatUseCase updateChatUseCase) {
-        return new SolicitacaoAceitaResponseUseCase(findChatByIdUseCase, updateChatUseCase);
+    public SolicitacaoAceitaResponseEventListenerPort solicitacaoAceitaResponseUseCase(
+            FindChatByIdUseCase findChatByIdUseCase,
+            UpdateChatUseCase updateChatUseCase,
+            ChatFlowService chatFlowService,
+            Optional<NotificationService> notificationService) {
+        return new SolicitacaoAceitaResponseUseCase(findChatByIdUseCase, updateChatUseCase, chatFlowService, notificationService);
     }
 }
