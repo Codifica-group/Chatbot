@@ -55,20 +55,20 @@ public class ChatController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChatDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<ChatDTO> findById(@PathVariable Long id) {
         return findChatByIdUseCase.execute(id)
                 .map(chat -> ResponseEntity.ok(chatDtoMapper.toDto(chat)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable Integer id, @RequestBody ChatDTO chatDTO) {
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @RequestBody ChatDTO chatDTO) {
         Map<String, Object> response = updateChatUseCase.execute(id, chatDtoMapper.toDomain(chatDTO));
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteChatUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }

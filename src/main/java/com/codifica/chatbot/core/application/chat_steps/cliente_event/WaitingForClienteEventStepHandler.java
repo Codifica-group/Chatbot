@@ -45,7 +45,7 @@ public class WaitingForClienteEventStepHandler implements ConversationStep {
         }
     }
 
-    private void publishClienteEvent(Integer chatId, Map<String, String> dados) {
+    private void publishClienteEvent(Long chatId, Map<String, String> dados) {
         ClienteParaCadastrarEvent event = new ClienteParaCadastrarEvent(
                 chatId,
                 dados.get("nome"),

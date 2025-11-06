@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface ChatRepository {
     Chat save(Chat chat);
-    Optional<Chat> findById(Integer id);
+    Optional<Chat> findById(Long id);
     List<Chat> findAll();
-    void deleteById(Integer id);
+    void deleteById(Long id);
 }

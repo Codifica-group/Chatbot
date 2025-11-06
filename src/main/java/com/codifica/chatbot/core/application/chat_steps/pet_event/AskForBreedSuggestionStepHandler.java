@@ -58,7 +58,7 @@ public class AskForBreedSuggestionStepHandler implements ConversationStep {
         }
     }
 
-    private void publishPetEvent(Integer chatId, Integer clienteId, String petNome, Raca raca) {
+    private void publishPetEvent(Long chatId, Integer clienteId, String petNome, Raca raca) {
         PetParaCadastrarEvent event = new PetParaCadastrarEvent(chatId, clienteId, petNome, raca);
         petEventPublisherPort.publishPetParaCadastrar(event);
     }

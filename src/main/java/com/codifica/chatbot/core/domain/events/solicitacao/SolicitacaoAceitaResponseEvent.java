@@ -7,14 +7,14 @@ import java.io.Serializable;
 public class SolicitacaoAceitaResponseEvent implements Serializable {
 
     private StatusEvent status;
-    private Integer chatId;
+    private Long chatId;
     private String erro;
 
     public StatusEvent getStatus() {
         return status;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

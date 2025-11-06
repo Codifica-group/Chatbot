@@ -3,14 +3,14 @@ package com.codifica.chatbot.interfaces.dto;
 import java.time.LocalDateTime;
 
 public class ChatDTO {
-    private Integer id;
+    private Long id;
     private String passoAtual;
     private String dadosContexto;
     private LocalDateTime dataAtualizacao;
     private Integer clienteId;
     private String clienteNome;
 
-    public ChatDTO(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Integer clienteId, String clienteNome) {
+    public ChatDTO(Long id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Integer clienteId, String clienteNome) {
         this.id = id;
         this.passoAtual = passoAtual;
         this.dadosContexto = dadosContexto;
@@ -21,11 +21,11 @@ public class ChatDTO {
 
     public ChatDTO() {}
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

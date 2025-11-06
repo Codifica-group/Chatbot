@@ -5,19 +5,19 @@ import java.time.LocalDateTime;
 
 public class SolicitacaoAceitaEvent implements Serializable {
 
-    private final Integer chatId;
+    private final Long chatId;
     private final Integer solicitacaoId;
     private final LocalDateTime dataHoraAtualizacao;
     private final boolean aceito;
 
-    public SolicitacaoAceitaEvent(Integer chatId, Integer solicitacaoId, LocalDateTime dataHoraAtualizacao, boolean aceito) {
+    public SolicitacaoAceitaEvent(Long chatId, Integer solicitacaoId, LocalDateTime dataHoraAtualizacao, boolean aceito) {
         this.chatId = chatId;
         this.solicitacaoId = solicitacaoId;
         this.dataHoraAtualizacao = dataHoraAtualizacao;
         this.aceito = aceito;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

@@ -8,14 +8,14 @@ import java.io.Serializable;
 
 public class PetParaCadastrarEvent implements Serializable {
 
-    private final Integer chatId;
+    private final Long chatId;
     private final Integer clienteId;
     private final String nome;
     private final Raca raca;
 
     @JsonCreator
     public PetParaCadastrarEvent(
-            @JsonProperty("chatId") Integer chatId,
+            @JsonProperty("chatId") Long chatId,
             @JsonProperty("clienteId") Integer clienteId,
             @JsonProperty("nome") String nome,
             @JsonProperty("raca") Raca raca) {
@@ -25,7 +25,7 @@ public class PetParaCadastrarEvent implements Serializable {
         this.raca = raca;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

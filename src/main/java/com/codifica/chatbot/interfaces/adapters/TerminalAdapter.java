@@ -69,7 +69,7 @@ public class TerminalAdapter implements CommandLineRunner {
                 if (choice == 0) {
                     Chat chatInicial = new Chat(null, "INICIO", "{}", LocalDateTime.now(), null);
                     Map<String, Object> response = createChatUseCase.execute(chatInicial);
-                    Integer chatId = (Integer) response.get("id");
+                    Long chatId = (Long) response.get("id");
                     currentChat = findChatByIdUseCase.execute(chatId).orElseThrow();
                     String chatbotResponse = chatFlowService.processMessage(currentChat, "");
                     System.out.println("Bot: " + chatbotResponse);

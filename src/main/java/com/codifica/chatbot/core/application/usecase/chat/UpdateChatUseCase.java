@@ -14,7 +14,7 @@ public class UpdateChatUseCase {
         this.chatRepository = chatRepository;
     }
 
-    public Map<String, Object> execute(Integer id, Chat chat) {
+    public Map<String, Object> execute(Long id, Chat chat) {
         chat.setId(id);
         Chat chatAtualizado = chatRepository.save(chat);
 

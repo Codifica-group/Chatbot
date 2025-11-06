@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SolicitacaoParaCadastrarEvent implements Serializable {
 
-    private final Integer chatId;
+    private final Long chatId;
     private final Integer petId;
     private final List<Integer> servicos;
     private final LocalDateTime dataHoraInicio;
@@ -18,7 +18,7 @@ public class SolicitacaoParaCadastrarEvent implements Serializable {
 
     @JsonCreator
     public SolicitacaoParaCadastrarEvent(
-            @JsonProperty("chatId") Integer chatId,
+            @JsonProperty("chatId") Long chatId,
             @JsonProperty("petId") Integer petId,
             @JsonProperty("servicos") List<Integer> servicos,
             @JsonProperty("dataHoraInicio") LocalDateTime dataHoraInicio,
@@ -32,7 +32,7 @@ public class SolicitacaoParaCadastrarEvent implements Serializable {
         this.status = status;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

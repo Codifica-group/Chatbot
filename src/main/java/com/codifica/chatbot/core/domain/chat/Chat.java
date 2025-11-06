@@ -4,13 +4,13 @@ import com.codifica.chatbot.core.domain.cliente.Cliente;
 import java.time.LocalDateTime;
 
 public class Chat {
-    private Integer id;
+    private Long id;
     private String passoAtual;
     private String dadosContexto;
     private LocalDateTime dataAtualizacao;
     private Cliente cliente;
 
-    public Chat(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Cliente cliente) {
+    public Chat(Long id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao, Cliente cliente) {
         this.id = id;
         this.passoAtual = passoAtual;
         this.dadosContexto = dadosContexto;
@@ -20,11 +20,11 @@ public class Chat {
 
     public Chat() {}
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

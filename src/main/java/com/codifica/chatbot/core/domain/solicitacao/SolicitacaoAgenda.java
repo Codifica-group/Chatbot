@@ -11,7 +11,7 @@ import java.util.List;
 public class SolicitacaoAgenda implements Serializable {
 
     private Integer id;
-    private Integer chatId;
+    private Long chatId;
     private Pet pet;
     private List<Servico> servicos;
     private Double valorDeslocamento;
@@ -25,7 +25,7 @@ public class SolicitacaoAgenda implements Serializable {
         return id;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

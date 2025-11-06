@@ -10,7 +10,7 @@ public class DeleteChatUseCase {
         this.chatRepository = chatRepository;
     }
 
-    public void execute(Integer id) {
+    public void execute(Long id) {
         chatRepository.deleteById(id);
     }
 }

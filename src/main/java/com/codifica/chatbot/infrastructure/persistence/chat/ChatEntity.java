@@ -13,7 +13,7 @@ public class ChatEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "passo_atual")
     private String passoAtual;
@@ -29,7 +29,7 @@ public class ChatEntity {
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     private ClienteEntity cliente;
 
-    public ChatEntity(Integer id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao) {
+    public ChatEntity(Long id, String passoAtual, String dadosContexto, LocalDateTime dataAtualizacao) {
         this.id = id;
         this.passoAtual = passoAtual;
         this.dadosContexto = dadosContexto;
@@ -38,11 +38,11 @@ public class ChatEntity {
 
     public ChatEntity() {}
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

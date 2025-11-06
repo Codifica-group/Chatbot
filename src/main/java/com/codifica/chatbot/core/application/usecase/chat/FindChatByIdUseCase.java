@@ -13,7 +13,7 @@ public class FindChatByIdUseCase {
         this.chatRepository = chatRepository;
     }
 
-    public Optional<Chat> execute(Integer id) {
+    public Optional<Chat> execute(Long id) {
         return chatRepository.findById(id);
     }
 }

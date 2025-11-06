@@ -40,7 +40,7 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
-    public Optional<Chat> findById(Integer id) {
+    public Optional<Chat> findById(Long id) {
         return chatJpaRepository.findById(id).map(chatMapper::toDomain);
     }
 
@@ -52,7 +52,7 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         chatJpaRepository.deleteById(id);
     }
 }

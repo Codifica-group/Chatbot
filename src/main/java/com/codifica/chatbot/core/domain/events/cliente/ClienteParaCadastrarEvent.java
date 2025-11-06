@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class ClienteParaCadastrarEvent implements Serializable {
 
-    private final Integer chatId;
+    private final Long chatId;
     private final String nome;
     private final String telefone;
     private final String cep;
@@ -16,7 +16,7 @@ public class ClienteParaCadastrarEvent implements Serializable {
 
     @JsonCreator
     public ClienteParaCadastrarEvent(
-            @JsonProperty("chatId") Integer chatId,
+            @JsonProperty("chatId") Long chatId,
             @JsonProperty("nome") String nome,
             @JsonProperty("telefone") String telefone,
             @JsonProperty("cep") String cep,
@@ -30,7 +30,7 @@ public class ClienteParaCadastrarEvent implements Serializable {
         this.complemento = complemento;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

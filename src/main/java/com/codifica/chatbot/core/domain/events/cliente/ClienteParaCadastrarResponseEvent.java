@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class ClienteParaCadastrarResponseEvent implements Serializable {
 
     private StatusEvent status;
-    private Integer chatId;
+    private Long chatId;
     private Integer clienteId;
     private String clienteNome;
     private String erro;
@@ -16,7 +16,7 @@ public class ClienteParaCadastrarResponseEvent implements Serializable {
         return status;
     }
 
-    public Integer getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 
