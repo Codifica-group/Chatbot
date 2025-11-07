@@ -89,7 +89,15 @@ public class TelegramAdapter extends TelegramLongPollingBot implements Notificat
         String userMessage;
 
         if (message.hasContact() && currentChat.getPassoAtual().equals("AGUARDANDO_TELEFONE_CLIENTE")) {
-            userMessage = message.getContact().getPhoneNumber();
+            String rawPhoneNumber = message.getContact().getPhoneNumber();
+            String digitsOnly = rawPhoneNumber.replaceAll("\\D", "");
+
+            if (digitsOnly.length() > 11) {
+                userMessage = digitsOnly.substring(digitsOnly.length() - 11);
+            } else {
+                userMessage = digitsOnly;
+            }
+
             sendAdaptedMessage(chatId, "Obrigado!", "REMOVE_KEYBOARD", null);
         }
         else if (message.hasText()) {
@@ -143,13 +151,9 @@ public class TelegramAdapter extends TelegramLongPollingBot implements Notificat
     @Override
     public void sendMessage(Long chatId, String message) {
         try {
-            Chat currentChat = findChatByIdUseCase.execute(chatId)
+            Chat updatedChat = findChatByIdUseCase.execute(chatId)
                     .orElseThrow(() -> new IllegalStateException("Chat não encontrado para notificação"));
-
-            String responseMessage = chatFlowService.processMessage(currentChat, "");
-            Chat updatedChat = findChatByIdUseCase.execute(chatId).orElseThrow();
-
-            sendAdaptedMessage(chatId, responseMessage, updatedChat.getPassoAtual(), updatedChat.getDadosContexto());
+            sendAdaptedMessage(chatId, message, updatedChat.getPassoAtual(), updatedChat.getDadosContexto());
         } catch (Exception e) {
             logger.error("Falha ao enviar mensagem proativa para o chat {}: {}", chatId, e.getMessage(), e);
         }

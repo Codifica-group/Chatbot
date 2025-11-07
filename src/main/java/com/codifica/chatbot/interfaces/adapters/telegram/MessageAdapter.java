@@ -37,6 +37,8 @@ public class MessageAdapter {
             case "AGUARDANDO_ESCOLHA_RACA_SUGESTAO":
                 InlineKeyboardMarkup inlineList = buildInlineKeyboardFromList(messageText, inlineButtonPattern);
                 if (inlineList != null) {
+                    String prompt = messageText.split("\n")[0];
+                    sendMessage.setText(prompt);
                     sendMessage.setReplyMarkup(inlineList);
                 }
                 break;
@@ -45,6 +47,12 @@ public class MessageAdapter {
             case "AGUARDANDO_RESPOSTA_SOLICITACAO_CLIENTE":
                 InlineKeyboardMarkup confirmationList = buildInlineKeyboardFromList(messageText, confirmationButtonPattern);
                 if (confirmationList != null) {
+                    int confirmationPromptIndex = messageText.lastIndexOf("Por favor, confirme o agendamento:");
+
+                    if (confirmationPromptIndex != -1) {
+                        sendMessage.setText(messageText.substring(0, confirmationPromptIndex).trim());
+                    }
+
                     sendMessage.setReplyMarkup(confirmationList);
                 }
                 break;
