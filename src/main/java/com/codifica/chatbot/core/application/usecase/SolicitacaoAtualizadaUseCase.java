@@ -6,7 +6,7 @@ import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
 import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.solicitacao.SolicitacaoAtualizadaEvent;
 import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
-import com.codifica.chatbot.interfaces.adapters.NotificationService;
+import com.codifica.chatbot.interfaces.adapters.telegram.NotificationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

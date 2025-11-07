@@ -7,7 +7,7 @@ import com.codifica.chatbot.core.domain.chat.Chat;
 import com.codifica.chatbot.core.domain.events.pet.PetParaCadastrarResponseEvent;
 import com.codifica.chatbot.core.domain.shared.StatusEvent;
 import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
-import com.codifica.chatbot.interfaces.adapters.NotificationService;
+import com.codifica.chatbot.interfaces.adapters.telegram.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

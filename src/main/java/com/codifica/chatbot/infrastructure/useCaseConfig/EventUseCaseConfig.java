@@ -6,7 +6,7 @@ import com.codifica.chatbot.core.application.usecase.*;
 import com.codifica.chatbot.core.application.usecase.chat.FindChatByIdUseCase;
 import com.codifica.chatbot.core.application.usecase.chat.UpdateChatUseCase;
 import com.codifica.chatbot.infrastructure.chat.ChatFlowService;
-import com.codifica.chatbot.interfaces.adapters.NotificationService;
+import com.codifica.chatbot.interfaces.adapters.telegram.NotificationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
