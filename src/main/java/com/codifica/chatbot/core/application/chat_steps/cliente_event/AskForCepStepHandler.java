@@ -29,7 +29,7 @@ public class AskForCepStepHandler implements ConversationStep {
             dadosContexto.put("telefone", userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 
-            String responseMessage = "Ok! E qual o seu CEP?";
+            String responseMessage = "E qual o seu CEP? 🏠";
             return new StepResponse(responseMessage, "AGUARDANDO_CEP_CLIENTE");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar seu telefone. Tente novamente.", getStepName());

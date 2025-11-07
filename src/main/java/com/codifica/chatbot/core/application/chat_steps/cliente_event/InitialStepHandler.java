@@ -13,7 +13,7 @@ public class InitialStepHandler implements ConversationStep {
 
     @Override
     public StepResponse process(Chat chat, String userMessage) {
-        String responseMessage = "Olá! Bem-vindo ao nosso pet shop. Para começarmos, qual é o seu nome completo?";
+        String responseMessage = "Olá! Bem-vindo ao nosso pet shop 🐾 Para começar, qual é o seu nome completo?";
         return new StepResponse(responseMessage, "AGUARDANDO_NOME_CLIENTE");
     }
 }

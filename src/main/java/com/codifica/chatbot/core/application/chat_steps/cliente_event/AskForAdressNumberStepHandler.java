@@ -29,7 +29,7 @@ public class AskForAdressNumberStepHandler implements ConversationStep {
             dadosContexto.put("cep", userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 
-            String responseMessage = "Entendi. Qual o número do seu endereço?";
+            String responseMessage = "Entendi! Qual o número do seu endereço?";
             return new StepResponse(responseMessage, "AGUARDANDO_NUMERO_ENDERECO_CLIENTE");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar seu cep. Tente novamente.", getStepName());

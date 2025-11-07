@@ -71,7 +71,7 @@ public class PublishSolicitationStepHandler implements ConversationStep {
             solicitacaoEventPublisherPort.publishSolicitacaoParaCadastrar(event);
             chat.setDadosContexto("{}");
 
-            return new StepResponse("Sua solicitação foi enviada com sucesso! Em breve você receberá a confirmação.", "AGUARDANDO_RESPOSTA_SOLICITACAO_PETSHOP");
+            return new StepResponse("Sua solicitação foi enviada com sucesso! 📥 Em breve você receberá a confirmação do pet shop", "AGUARDANDO_RESPOSTA_SOLICITACAO_PETSHOP");
 
         } catch (Exception e) {
             logger.error("FALHA: Erro ao processar escolha dos serviços: ", e);

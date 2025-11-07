@@ -16,7 +16,7 @@ public class UniversalErrorStepHandler implements ConversationStep {
     public StepResponse process(Chat chat, String userMessage) {
 
         String safeStep = SafeResetStepUseCase.execute(chat);
-        String responseMessage = "Desculpe, ocorreu um erro inesperado e não consegui processar sua mensagem. Já registramos o problema. Por favor, tente novamente mais tarde.";
+        String responseMessage = "Desculpe, ocorreu um erro inesperado e não consegui processar sua mensagem 😥 Já registramos o problema! Por favor, tente novamente mais tarde.";
 
         return new StepResponse(responseMessage, safeStep);
     }

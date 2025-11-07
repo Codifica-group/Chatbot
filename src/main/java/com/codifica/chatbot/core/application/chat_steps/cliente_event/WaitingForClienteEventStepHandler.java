@@ -38,7 +38,7 @@ public class WaitingForClienteEventStepHandler implements ConversationStep {
 
             publishClienteEvent(chat.getId(), dadosContexto);
 
-            String responseMessage = "Perfeito! Já enviei seus dados para o nosso sistema. Um momento enquanto finalizamos seu cadastro.";
+            String responseMessage = "Perfeito! Já enviei seus dados para o sistema 🚀 Só um momento enquanto finalizo seu cadastro";
             return new StepResponse(responseMessage, "AGUARDANDO_RESPOSTA_CADASTRO_CLIENTE");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar o complemento do seu endereço. Tente novamente.", getStepName());

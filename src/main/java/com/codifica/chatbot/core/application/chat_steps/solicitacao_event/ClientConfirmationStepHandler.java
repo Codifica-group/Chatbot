@@ -55,9 +55,9 @@ public class ClientConfirmationStepHandler implements ConversationStep {
 
             String responseMessage;
             if (aceito) {
-                responseMessage = "Ótimo estou confirmando seu agendamento. Só um momento, por favor.";
+                responseMessage = "Ótimo! Estou confirmando seu agendamento, só um momento por favor... ⌛";
             } else {
-                responseMessage = "Entendido estou cancelando sua solicitação. Só um momento, por favor.";
+                responseMessage = "Entendido! Estou cancelando sua solicitação, só um momento... ⌛";
             }
 
             return new StepResponse(responseMessage, "AGUARDANDO_RESPOSTA_SOLICITACAO_API");

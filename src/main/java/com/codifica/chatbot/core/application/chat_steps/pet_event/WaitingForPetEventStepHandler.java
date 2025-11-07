@@ -41,12 +41,12 @@ public class WaitingForPetEventStepHandler implements ConversationStep {
             Raca raca = mainBackendService.findRacaByNome(userMessage);
             Map<String, String> dadosContexto = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
             publishPetEvent(chat.getId(), chat.getCliente().getId(), dadosContexto.get("pet_nome"), raca);
-            return new StepResponse("Tudo certo! Cadastrei seu pet. Agora vamos para o agendamento.", "AGUARDANDO_RESPOSTA_CADASTRO_PET");
+            return new StepResponse("Tudo certo! Cadastrei seu pet ✅ Agora vamos para o agendamento", "AGUARDANDO_RESPOSTA_CADASTRO_PET");
 
         } catch (HttpClientErrorException.NotFound e) {
             List<Raca> sugestoes = mainBackendService.findRacasByNomeSemelhante(userMessage);
             if (sugestoes == null || sugestoes.isEmpty()) {
-                return new StepResponse("Não encontrei essa raça e nenhuma parecida. Por favor, digite o nome da raça novamente.", getStepName());
+                return new StepResponse("Não encontrei essa raça e nenhuma parecida ☹️ Por favor, digite o nome da raça novamente", getStepName());
             }
 
             try {
@@ -54,7 +54,7 @@ public class WaitingForPetEventStepHandler implements ConversationStep {
                 context.put("sugestoesRaca", sugestoes);
                 chat.setDadosContexto(objectMapper.writeValueAsString(context));
 
-                StringBuilder response = new StringBuilder("Não encontrei essa raça. Você quis dizer uma destas?\n");
+                StringBuilder response = new StringBuilder("Humm, não encontrei essa raça... Você quis dizer uma destas? 👇\n");
                 for (int i = 0; i < sugestoes.size(); i++) {
                     response.append(String.format("%d - %s\n", i + 1, sugestoes.get(i).getNome()));
                 }

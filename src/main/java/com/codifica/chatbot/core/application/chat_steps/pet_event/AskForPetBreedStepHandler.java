@@ -36,7 +36,7 @@ public class AskForPetBreedStepHandler implements ConversationStep {
             dadosContexto.put("pet_nome", userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 
-            String responseMessage = "Que nome legal! E qual é a raça do(a) " + userMessage + "?";
+            String responseMessage = "Que nome legal! E qual é a raça do(a) " + userMessage + "? 🐶";
             return new StepResponse(responseMessage, "AGUARDANDO_RACA_PET");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar o nome do seu pet. Tente novamente.", getStepName());

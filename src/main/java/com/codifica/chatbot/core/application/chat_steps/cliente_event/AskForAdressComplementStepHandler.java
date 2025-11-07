@@ -29,7 +29,7 @@ public class AskForAdressComplementStepHandler implements ConversationStep {
             dadosContexto.put("numeroEndereco", userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 
-            String responseMessage = "Estamos quase lá! O endereço possui complemento? Se não tiver, digite 'não'.";
+            String responseMessage = "Estamos quase lá! Seu endereço tem complemento? (Se não tiver, é só digitar \"não\")";
             return new StepResponse(responseMessage, "AGUARDANDO_COMPLEMENTO_CLIENTE");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar seu número do endereço. Tente novamente.", getStepName());

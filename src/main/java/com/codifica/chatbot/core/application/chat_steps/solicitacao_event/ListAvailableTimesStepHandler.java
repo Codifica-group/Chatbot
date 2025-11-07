@@ -80,7 +80,7 @@ public class ListAvailableTimesStepHandler implements ConversationStep {
             List<LocalTime> availableTimes = chosenDay.getHorarios();
             chat.setDadosContexto(objectMapper.writeValueAsString(context));
 
-            StringBuilder response = new StringBuilder("Perfeito! Agora, escolha um horário:\n");
+            StringBuilder response = new StringBuilder("Agora, escolha um horário ⏰\n");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
             for (int i = 0; i < availableTimes.size(); i++) {
                 response.append(String.format("%d - %s\n", i + 1, availableTimes.get(i).format(timeFormatter)));

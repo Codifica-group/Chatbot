@@ -29,7 +29,7 @@ public class AskForPetStepHandler implements ConversationStep {
     @Override
     public StepResponse process(Chat chat, String userMessage) {
         List<Pet> pets = mainBackendService.listPetsByClienteId(chat.getCliente().getId());
-        StringBuilder response = new StringBuilder("Selecione um de seus pets para o agendamento:\n");
+        StringBuilder response = new StringBuilder("Para qual dos seus pets você gostaria de agendar? 🐕\n");
         for (int i = 0; i < pets.size(); i++) {
             response.append(String.format("%d - %s\n", i + 1, pets.get(i).getNome()));
         }

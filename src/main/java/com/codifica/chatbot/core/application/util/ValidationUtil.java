@@ -17,11 +17,11 @@ public class ValidationUtil {
 
     public static String validate(String input, int maxLength) {
         if (input == null || input.trim().isEmpty()) {
-            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+            return "Ops! Parece que sua mensagem foi vazia. Tente novamente para continuarmos, por favor";
         }
 
         if (input.length() > maxLength) {
-            return "A mensagem que você enviou é muito longa. Por favor, tente novamente com no máximo " + maxLength + " caracteres.";
+            return "A mensagem que você enviou é muito longa. Por favor, tente novamente com no máximo " + maxLength + " caracteres";
         }
 
         Matcher invalidMatcher = INVALID_CHAR_PATTERN.matcher(input);
@@ -34,7 +34,7 @@ public class ValidationUtil {
             String invalidChars = invalidCharsSet.stream()
                     .sorted()
                     .collect(Collectors.joining("', '", "'", "'"));
-            return String.format("Parece que você usou caracteres proibidos. Por favor, tente novamente sem usar: %s.", invalidChars);
+            return String.format("Parece que você usou caracteres proibidos. Por favor, tente novamente sem usar: %s", invalidChars);
         }
 
         return null;
@@ -46,36 +46,36 @@ public class ValidationUtil {
 
     public static String validatePhoneNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+            return "Ops! Parece que sua mensagem foi vazia. Tente novamente para continuarmos, por favor";
         }
         if (!PHONE_PATTERN.matcher(phoneNumber).matches()) {
-            return "O número de telefone parece inválido. Por favor, digite apenas os 11 dígitos do seu celular, incluindo o DDD, sem espaços, traços, parênteses ou código de país.";
+            return "O número de telefone parece inválido. Por favor, digite apenas os 11 dígitos do seu celular, incluindo o DDD, sem espaços, traços, parênteses ou código de país";
         }
         return null;
     }
 
     public static String validateCep(String cep) {
         if (cep == null || cep.trim().isEmpty()) {
-            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+            return "Ops! Parece que sua mensagem foi vazia. Tente novamente para continuarmos, por favor";
         }
         if (!CEP_PATTERN.matcher(cep).matches()) {
-            return "O CEP parece inválido. Por favor, digite apenas os 8 números do seu CEP.";
+            return "O CEP parece inválido. Por favor, digite apenas os 8 números do seu CEP";
         }
         return null;
     }
 
     public static String validateIntegerChoice(String input, int maxChoice) {
         if (input == null || input.trim().isEmpty()) {
-            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+            return "Ops! Parece que sua mensagem foi vazia. Tente novamente para continuarmos, por favor";
         }
 
         try {
             int choice = Integer.parseInt(input.trim());
             if (choice < 1 || choice > maxChoice) {
-                return "Essa não é uma opção válida. Por favor, escolha um dos números da lista.";
+                return "Essa não é uma opção válida. Por favor, escolha uma das opções acima";
             }
         } catch (NumberFormatException e) {
-            return "Por favor, digite apenas o número correspondente à opção desejada.";
+            return "Por favor, digite apenas o número correspondente à opção desejada";
         }
 
         return null;
@@ -83,7 +83,7 @@ public class ValidationUtil {
 
     public static String validateServiceChoice(String input, int maxChoice) {
         if (input == null || input.trim().isEmpty()) {
-            return "Parece que você enviou uma mensagem vazia. Por favor, tente novamente para continuarmos.";
+            return "Ops! Parece que sua mensagem foi vazia. Tente novamente para continuarmos, por favor";
         }
 
         try {
@@ -93,11 +93,11 @@ public class ValidationUtil {
 
             for (Integer choice : choices) {
                 if (choice < 1 || choice > maxChoice) {
-                    return "Opa! Um dos números que você digitou (" + choice + ") não é uma opção válida. Por favor, tente novamente com os números da lista.";
+                    return "Opa! Um dos números que você digitou (" + choice + ") não é uma opção válida. Por favor, tente novamente com os números da lista";
                 }
             }
         } catch (NumberFormatException e) {
-            return "Por favor, digite apenas os números dos serviços, separados por vírgula.";
+            return "Por favor, digite apenas os números dos serviços, separados por vírgula";
         }
 
         return null;

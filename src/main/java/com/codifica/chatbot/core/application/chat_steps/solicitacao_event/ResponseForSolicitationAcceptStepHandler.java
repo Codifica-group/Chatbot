@@ -34,9 +34,9 @@ public class ResponseForSolicitationAcceptStepHandler implements ConversationSte
                 String diaDaSemana = DiaDaSemana.fromDate(dataHoraInicio.toLocalDate());
                 String dataFormatada = diaDaSemana + ", " + dataHoraInicio.format(formatter);
 
-                responseMessage = "Tudo certo! Seu agendamento foi confirmado para " + dataFormatada + ". Estamos ansiosos para recebê-lo!";
+                responseMessage = "Tudo certo! Seu agendamento foi confirmado para " + dataFormatada + " ✅ Estamos ansiosos para recebê-lo!";
             } else {
-                responseMessage = "Agendamento cancelado. Se mudar de ideia, é só chamar!";
+                responseMessage = "Agendamento cancelado! Se mudar de ideia, é só chamar 😉";
             }
             chat.setDadosContexto("{}");
             return new StepResponse(responseMessage, "IDLE");

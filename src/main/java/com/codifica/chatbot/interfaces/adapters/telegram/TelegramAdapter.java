@@ -133,7 +133,7 @@ public class TelegramAdapter extends TelegramLongPollingBot implements Notificat
 
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem do Telegram para o chat {}: {}", chatId, e.getMessage(), e);
-            sendAdaptedMessage(chatId, "Desculpe, ocorreu um erro inesperado. Tente novamente mais tarde.", "ERRO", null);
+            sendAdaptedMessage(chatId, "Desculpe, ocorreu um erro inesperado e não consegui processar sua mensagem 😥 Já registramos o problema! Por favor, tente novamente mais tarde.", "ERRO", null);
         }
     }
 

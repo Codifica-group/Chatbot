@@ -27,6 +27,19 @@ public class MessageAdapter {
         switch (nextStep) {
             // Caso 1: Solicitar número de telefone
             case "AGUARDANDO_TELEFONE_CLIENTE":
+                String greeting = "";
+                if (messageText.contains("!")) {
+                    greeting = messageText.substring(0, messageText.indexOf('!') + 1);
+                }
+
+                String newInstruction = "Para continuar, por favor, compartilhe seu contato clicando no botão abaixo. É mais rápido e seguro! 📱";
+
+                if (!greeting.isEmpty()) {
+                    sendMessage.setText(greeting + "\n\n" + newInstruction);
+                } else {
+                    sendMessage.setText(newInstruction);
+                }
+
                 sendMessage.setReplyMarkup(buildContactRequestKeyboard());
                 break;
 

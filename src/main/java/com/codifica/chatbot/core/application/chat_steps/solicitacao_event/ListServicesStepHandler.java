@@ -70,7 +70,7 @@ public class ListServicesStepHandler implements ConversationStep {
             context.put("listaServicos", servicos);
             chat.setDadosContexto(objectMapper.writeValueAsString(context));
 
-            StringBuilder response = new StringBuilder("Ótimo! Agora, digite os números dos serviços que você deseja, separados por vírgula:\n");
+            StringBuilder response = new StringBuilder("Ok! Agora, digite os números dos serviços que você deseja, separados por vírgula (ex: 1, 2) 🛁\n");
             for (int i = 0; i < servicos.size(); i++) {
                 response.append(String.format("%d - %s\n", i + 1, servicos.get(i).getNome()));
             }

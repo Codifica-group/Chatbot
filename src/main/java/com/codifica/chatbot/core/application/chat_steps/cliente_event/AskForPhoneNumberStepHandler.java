@@ -29,7 +29,7 @@ public class AskForPhoneNumberStepHandler implements ConversationStep {
             dadosContexto.put("nome", userMessage);
             chat.setDadosContexto(objectMapper.writeValueAsString(dadosContexto));
 
-            String responseMessage = "Obrigado, " + userMessage.split(" ")[0] + "! Agora, por favor, digite seu telefone com DDD (apenas números).";
+            String responseMessage = "Perfeito, " + userMessage.split(" ")[0] + "! Agora, por favor, digite seu telefone com DDD (apenas números)";
             return new StepResponse(responseMessage, "AGUARDANDO_TELEFONE_CLIENTE");
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar seu nome. Tente novamente.", getStepName());

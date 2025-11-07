@@ -33,9 +33,9 @@ public class SolicitacaoAtualizadaStepHandler implements ConversationStep {
             String servicos = event.getSolicitacao().getServicos().stream().map(servico -> servico.getNome()).reduce((a, b) -> a + ", " + b).get();
 
             if (event.getAceito()) {
-                String mensagem = "Boas notícias! O petshop orçou sua solicitação de agendamento.\n\n";
+                String mensagem = "Boas notícias! O pet shop já respondeu sua solicitação 🎉\n\n";
                 if (event.getDataInicioAlterada()) {
-                    mensagem += "**Atenção:** A data de início foi alterada.\n\n";
+                    mensagem += "**Atenção:** A data do agendamento foi alterada.\n\n";
                 }
                 mensagem += "Detalhes do Agendamento:\n";
                 mensagem += "- Pet: " + event.getSolicitacao().getPet().getNome() + "\n";
@@ -48,7 +48,7 @@ public class SolicitacaoAtualizadaStepHandler implements ConversationStep {
                 return new StepResponse(mensagem, "AGUARDANDO_RESPOSTA_SOLICITACAO_CLIENTE");
             } else {
                 chat.setDadosContexto("{}");
-                return new StepResponse("Infelizmente, o petshop não pôde aceitar sua solicitação de agendamento no momento.", "IDLE");
+                return new StepResponse("Infelizmente, o petshop não pôde aceitar sua solicitação de agendamento no momento 😔", "IDLE");
             }
         } catch (Exception e) {
             return new StepResponse("Ocorreu um erro ao processar a resposta do petshop. Tente novamente.", getStepName());

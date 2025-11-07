@@ -15,7 +15,7 @@ public class AskForPetNameStepHandler implements ConversationStep {
     public StepResponse process(Chat chat, String userMessage) {
         String clienteNome = chat.getCliente() != null ? chat.getCliente().getNome() : "";
         String responseMessage = String.format(
-                "Ótimo, %s! Seu cadastro foi concluído com sucesso. Agora vamos cadastrar o seu pet. Qual é o nome dele?",
+                "Ótimo, %s! Seu cadastro foi concluído com sucesso ✅ Agora vamos cadastrar seu pet! Qual o nome dele?",
                 clienteNome
         );
         return new StepResponse(responseMessage, "AGUARDANDO_NOME_PET");

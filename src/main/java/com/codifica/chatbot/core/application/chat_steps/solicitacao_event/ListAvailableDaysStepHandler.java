@@ -63,7 +63,7 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
                 String diaDaSemana = DiaDaSemana.fromDate(nextAgenda.getDataHoraInicio().toLocalDate());
                 String dataFormatada = diaDaSemana + ", " + nextAgenda.getDataHoraInicio().format(formatter);
                 String errorMessage = String.format(
-                        "Desculpe, %s já possui um agendamento futuro para %s. Não é possível criar um novo agendamento no momento.",
+                        "Ops! %s já tem um agendamento marcado para %s 📅 Não podemos marcar outro por enquanto",
                         chosenPet.getNome(),
                         dataFormatada
                 );
@@ -85,7 +85,7 @@ public class ListAvailableDaysStepHandler implements ConversationStep {
                 return new StepResponse("Desculpe, não encontrei horários disponíveis nos próximos 14 dias. Por favor, tente novamente mais tarde.", "IDLE");
             }
 
-            StringBuilder response = new StringBuilder("Ótimo! Aqui estão os próximos dias com horários disponíveis:\n");
+            StringBuilder response = new StringBuilder("Ótimo! Aqui estão os próximos dias com horários disponíveis 📅\n");
             for (int i = 0; i < disponibilidade.size(); i++) {
                 response.append(String.format("%d - %s - %s\n",
                         i + 1,
