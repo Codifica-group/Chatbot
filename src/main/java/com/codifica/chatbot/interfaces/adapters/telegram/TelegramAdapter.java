@@ -176,9 +176,9 @@ public class TelegramAdapter extends TelegramLongPollingBot implements Notificat
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(this);
-            logger.info("Bot do Telegram registrado com sucesso: {}", this.botUsername);
+            logger.info("TELEGRAM: Bot registrado com sucesso: {}", this.botUsername);
         } catch (TelegramApiException e) {
-            logger.error("Falha ao registrar o bot do Telegram", e);
+            logger.error("TELEGRAM: Falha ao registrar o bot:", e);
         }
     }
 }
