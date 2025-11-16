@@ -43,7 +43,7 @@ public class AskForBreedSuggestionStepHandler implements ConversationStep {
             if (choice == sugestoes.size()) {
                 context.remove("sugestoesRaca");
                 chat.setDadosContexto(objectMapper.writeValueAsString(context));
-                return new StepResponse("Entendido. Por favor, digite o nome da raça novamente.", "AGUARDANDO_RACA_PET");
+                return new StepResponse("Entendido! Estou enviando os dados do seu pet para cadastro 🚀 Só um momento...", "AGUARDANDO_RACA_PET");
             }
 
             Raca racaEscolhida = sugestoes.get(choice);

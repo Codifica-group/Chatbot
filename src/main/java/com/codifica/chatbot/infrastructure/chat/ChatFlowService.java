@@ -18,6 +18,11 @@ public class ChatFlowService {
     private final StepHandlerFactory stepHandlerFactory;
     private static final Logger logger = LoggerFactory.getLogger(ChatFlowService.class);
 
+    private static final Set<String> PROACTIVE_STEPS = Set.of(
+            "IDLE",
+            "PET_CADASTRADO_SUCESSO"
+    );
+
     public ChatFlowService(UpdateChatUseCase updateChatUseCase, StepHandlerFactory stepHandlerFactory) {
         this.updateChatUseCase = updateChatUseCase;
         this.stepHandlerFactory = stepHandlerFactory;
@@ -35,9 +40,9 @@ public class ChatFlowService {
             chat.setDataAtualizacao(LocalDateTime.now());
             String finalResponseMessage = stepResponse.responseMessage();
 
-            if ("IDLE".equals(currentStepName)) {
+            if (PROACTIVE_STEPS.contains(currentStepName)) {
                 var nextHandler = stepHandlerFactory.getHandler(chat.getPassoAtual())
-                        .orElseThrow(() -> new IllegalStateException("Nenhum handler encontrado para o passo seguinte ao IDLE: " + chat.getPassoAtual()));
+                        .orElseThrow(() -> new IllegalStateException("Nenhum handler encontrado para o passo seguinte ao" + currentStepName + " : " + chat.getPassoAtual()));
 
                 StepResponse nextStepResponse = nextHandler.process(chat, "");
                 chat.setPassoAtual(nextStepResponse.nextStep());

@@ -41,7 +41,7 @@ public class WaitingForPetEventStepHandler implements ConversationStep {
             Raca raca = mainBackendService.findRacaByNome(userMessage);
             Map<String, String> dadosContexto = objectMapper.readValue(chat.getDadosContexto(), new TypeReference<>() {});
             publishPetEvent(chat.getId(), chat.getCliente().getId(), dadosContexto.get("pet_nome"), raca);
-            return new StepResponse("Tudo certo! Cadastrei seu pet ✅ Agora vamos para o agendamento", "AGUARDANDO_RESPOSTA_CADASTRO_PET");
+            return new StepResponse("Entendido! Estou enviando os dados do seu pet para cadastro 🚀 Só um momento...", "AGUARDANDO_RESPOSTA_CADASTRO_PET");
 
         } catch (HttpClientErrorException.NotFound e) {
             List<Raca> sugestoes = mainBackendService.findRacasByNomeSemelhante(userMessage);
