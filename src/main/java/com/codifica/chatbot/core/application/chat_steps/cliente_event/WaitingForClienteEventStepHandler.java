@@ -51,6 +51,9 @@ public class WaitingForClienteEventStepHandler implements ConversationStep {
                 dados.get("nome"),
                 dados.get("telefone"),
                 dados.get("cep"),
+                dados.get("rua"),
+                dados.get("bairro"),
+                dados.get("cidade"),
                 dados.get("numeroEndereco"),
                 dados.get("complemento")
         );

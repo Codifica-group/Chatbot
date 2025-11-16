@@ -34,8 +34,8 @@ public class ChatStepsUseCaseConfig {
     }
 
     @Bean
-    public ConversationStep askForAdressNumberStepHandler() {
-        return new AskForAdressNumberStepHandler();
+    public ConversationStep askForAdressNumberStepHandler(MainBackendService mainBackendService) {
+        return new AskForAdressNumberStepHandler(mainBackendService);
     }
 
     @Bean

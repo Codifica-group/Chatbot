@@ -6,6 +6,7 @@ import com.codifica.chatbot.core.domain.pet.Pet;
 import com.codifica.chatbot.core.domain.raca.Raca;
 import com.codifica.chatbot.core.domain.servico.Servico;
 import com.codifica.chatbot.core.domain.shared.Dia;
+import com.codifica.chatbot.interfaces.dto.CepDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -35,6 +36,26 @@ public class MainBackendService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Internal-API-Key", internalApiKey);
         return new HttpEntity<>(headers);
+    }
+
+    public Optional<CepDTO> findEnderecoByCep(String cep) {
+        String url = apiUrl + "cep/" + cep.replaceAll("\\D", "");
+        try {
+            ResponseEntity<CepDTO> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    createHeaders(),
+                    CepDTO.class
+            );
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && !response.getBody().isErro()) {
+                return Optional.of(response.getBody());
+            }
+            return Optional.empty();
+        } catch (HttpClientErrorException.NotFound e) {
+            return Optional.empty();
+        } catch (RestClientException e) {
+            return Optional.empty();
+        }
     }
 
     public List<Pet> listPetsByClienteId(Integer clienteId) {
