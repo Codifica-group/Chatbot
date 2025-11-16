@@ -25,13 +25,22 @@ A aplicação utiliza RabbitMQ para comunicação assíncrona com o backend prin
 
 **Eventos Publicados:**
 
-* **`cliente.para-cadastrar`**: Disparado para solicitar o cadastro de um novo cliente no backend.
-* **`pet.para-cadastrar`**: Disparado para solicitar o cadastro de um novo pet para um cliente existente.
+| Evento | Routing Key | Descrição |
+| --- | --- | --- |
+| `ClienteParaCadastrarEvent` | `cliente.para-cadastrar` | Disparado para solicitar o cadastro de um novo cliente no backend. |
+| `PetParaCadastrarEvent` | `pet.para-cadastrar` | Disparado para solicitar o cadastro de um novo pet para um cliente existente. |
+| `SolicitacaoParaCadastrarEvent` | `solicitacao.para-cadastrar` | Disparado para solicitar o cadastro de uma nova solicitação de agendamento. |
+| `SolicitacaoAceitaEvent` | `solicitacao.aceita` | Disparado para informar o backend a resposta do cliente (aceite ou recusa) a uma oferta de agendamento. |
 
 **Eventos Consumidos:**
 
-* **`cliente.cadastro.response`**: Consumido para saber o resultado (sucesso ou falha) do cadastro do cliente e atualizar o estado do chat.
-* **`pet.cadastro.response`**: Consumido para saber o resultado (sucesso ou falha) do cadastro do pet e atualizar o estado do chat.
+| Evento | Queue | Descrição |
+| --- | --- | --- |
+| `ClienteParaCadastrarResponseEvent` | `cliente.cadastro.response` | Consumido para saber o resultado (sucesso ou falha) do cadastro do cliente e atualizar o estado do chat. |
+| `PetParaCadastrarResponseEvent` | `pet.cadastro.response` | Consumido para saber o resultado (sucesso ou falha) do cadastro do pet e atualizar o estado do chat. |
+| `SolicitacaoParaCadastrarResponseEvent` | `solicitacao.cadastro.response` | Consumido para saber o resultado (sucesso ou falha) do cadastro da solicitação. |
+| `SolicitacaoAtualizadaEvent` | `solicitacao.atualizada` | Consumido quando o petshop aceita/recusa/altera uma solicitação, notificando o cliente. |
+| `SolicitacaoAceitaResponseEvent` | `solicitacao.aceita.response` | Consumido para saber o resultado (sucesso ou falha) da confirmação/recusa do cliente. |
 
 ## Compilação e Execução
 
@@ -40,22 +49,23 @@ A aplicação utiliza RabbitMQ para comunicação assíncrona com o backend prin
 * Java 21
 * Maven 3.9 ou superior
 * Docker e Docker Compose
+* Imagem Docker do RabbitMQ
 * Variáveis de ambiente configuradas
 
 ### Variáveis de Ambiente
 
 As seguintes variáveis de ambiente precisam ser configuradas para a aplicação:
 
-| Variável | Descrição                                                                                     |
-| --- |-----------------------------------------------------------------------------------------------|
-| `SPRING_PROFILES_ACTIVE` | Ativa o perfil de configuração do Spring. **Padrão dev:** `dev-terminal`.                     |
-| `API_URL` | Endereço base da API do backend. **Padrão dev:** `http://localhost:8080/api/`.                |
-| `INTERNAL_API_KEY`       | Chave da API interna para conexão com microsserviço Chatbot. **Deve ser definida.**         |
+| Variável | Descrição                                                                                  |
+| --- |--------------------------------------------------------------------------------------------|
+| `SPRING_PROFILES_ACTIVE` | Ativa o perfil de configuração do Spring. **Padrão dev:** `dev-terminal`.|
+| `API_URL` | Endereço base da API do backend. **Padrão dev:** `http://localhost:8080/api/`.|
+| `INTERNAL_API_KEY`       | Chave da API interna para conexão com microsserviço Chatbot. **Deve ser definida.**|
 | `DB_URL` | Endereço de conexão do banco de dados. **Padrão dev:** `jdbc:mysql://localhost:3306/Chatbot`. |
-| `DB_USERNAME` | Nome de usuário do banco de dados. **Padrão dev:** `root`.                                    |
-| `DB_PASSWORD` | Senha do banco de dados. **Deve ser definida.**                                               |
-| `CORS_ALLOWED_ORIGINS` | Libera o acesso à API para o frontend. **Padrão dev:** `http://localhost:5173`.               |
-
+| `DB_USERNAME` | Nome de usuário do banco de dados. **Padrão dev:** `root`.|
+| `DB_PASSWORD` | Senha do banco de dados. **Deve ser definida.**|
+| `TELEGRAM_BOT_USERNAME` | Nome de usuário do Bot do Telegram (Se perfil `telegram` ativo).|
+| `TELEGRAM_BOT_TOKEN` | Token de acesso do Bot do Telegram (Se perfil `telegram` ativo).|
 ### Perfis de Execução
 
 A aplicação utiliza um sistema de perfis modular para combinar diferentes configurações de banco de dados e interfaces de comunicação.
@@ -66,7 +76,6 @@ A aplicação utiliza um sistema de perfis modular para combinar diferentes conf
 * `prod`: Utiliza um banco de dados MySQL.
 * `terminal`: Ativa a interface de linha de comando para simular conversas.
 * `telegram`: Ativa o adaptador para a API do Telegram.
-* `whatsapp`: Ativa o adaptador para a API do WhatsApp.
 
 #### Exemplos de usos:
 
@@ -85,4 +94,25 @@ A aplicação utiliza um sistema de perfis modular para combinar diferentes conf
 
     ```bash
     ./mvnw spring-boot:run
+    ```
+
+### Comando úteis
+1. Criar .jar:
+    ```bash
+    mvn package -DskipTests
+    ```
+
+2. Executar .jar:
+    ```bash
+    java -jar target/chatbot-0.0.1-SNAPSHOT.jar
+    ```
+   
+3. Acessar Fila RabbitMQ (user: myuser / pass: secret):
+    ```bash
+    http://localhost:15672/
+    ```
+
+4. Parar o Docker Compose:
+    ```bash
+    docker-compose down
     ```
